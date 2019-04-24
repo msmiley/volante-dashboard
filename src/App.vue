@@ -3,11 +3,11 @@
     <template slot="logo">
       <img :src="logo"/>
     </template>
-    
-    <template slot="navbar"></template>
-    <template slot="sidebar"></template>
-    <template slot="sidebar-footer"></template>
-    
+
+    <!--<template slot="navbar"></template>-->
+    <!--<template slot="sidebar"></template>-->
+    <!--<template slot="sidebar-footer"></template>-->
+
   </vuestro-app>
 </template>
 
@@ -28,7 +28,7 @@ export default {
 
 <style>
 
-html, body { 
+html, body {
   margin: 0;
   padding: 0;
 }

@@ -11,29 +11,41 @@ module.exports = {
 	events: {
 		'VolanteExpress.update'() {
 			if (require.main !== module) {
-				this.$emit('VolanteExpress.use', express.static(__dirname + '/dist'))
+				this.$emit('VolanteExpress.use', express.static(__dirname + '/dist'));
 			}
+		},
+		'VolanteExpress.listening'(obj) {
+			this.startSocketIO(obj.server);
+		}
+	},
+	methods: {
+		startSocketIO(server) {
+			const io = require('socket.io')(server);
+			io.on('connection', client => {
+			  client.on('event', data => { /* … */ });
+			  client.on('disconnect', () => { /* … */ });
+			});
 		},
 	},
 };
 
 if (require.main === module) {
-	console.log('running test volante wheel')
+	console.log('running test volante wheel');
 	const volante = require('volante');
 
 	let hub = new volante.Hub().debug();
-	
+
 	hub.on('volante.log', (d) => {
 		console.log(d);
 	});
-	
-	hub.attachAll().attachFromObject(module.exports)
-	
+
+	hub.attachAll().attachFromObject(module.exports);
+
 	// set up hot-reload webpack environment for dev
 	const webpack = require('webpack');
   const webpackConfig = require('./build/webpack.dev.config.js');
 	const compiler = webpack(webpackConfig);
-	
+
 	hub.emit('VolanteExpress.update', {
 		bind: '0.0.0.0',
 		middleware: [
@@ -48,6 +60,6 @@ if (require.main === module) {
 		  }),
 		],
 	});
-	
+
 	hub.emit('VolanteExpress.start');
 }
