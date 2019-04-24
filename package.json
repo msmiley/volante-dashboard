@@ -1,0 +1,43 @@
+{
+  "name": "volante-dashboard",
+  "version": "1.0.0",
+  "description": "volante module provides dashboard into volante",
+  "author": "Mike Smiley <msmiley@alumni.rice.edu>",
+  "url": "https://github.com/msmiley/volante-dashboard",
+  "repository": "msmiley/volante-dashboard.git",
+  "license": "ISC",
+	"main": "index.js",
+  "scripts": {
+    "dev": "npm start",
+		"start": "node index.js",
+    "prepare": "webpack --config ./build/webpack.prod.config.js"
+  },
+  "dependencies": {
+    "express": "^4.16.4",
+    "vue": "^2.6.10",
+    "vue-awesome": "^3.5.1",
+    "vue-router": "^3.0.6",
+    "vuestro": "^1.1.5"
+  },
+  "devDependencies": {
+    "connect-history-api-fallback": "^1.6.0",
+    "css-loader": "^2.1.1",
+    "html-webpack-plugin": "^3.2.0",
+    "mini-css-extract-plugin": "^0.6.0",
+    "optimize-css-assets-webpack-plugin": "^5.0.1",
+    "terser-webpack-plugin": "^1.2.3",
+    "url-loader": "^1.1.2",
+    "volante-express": "^2.5.0",
+    "vue-loader": "^15.7.0",
+    "vue-style-loader": "^4.1.2",
+    "vue-template-compiler": "^2.6.10",
+    "webpack": "^4.30.0",
+    "webpack-cli": "^3.3.0",
+    "webpack-dev-middleware": "^3.6.2",
+    "webpack-hot-middleware": "^2.24.3",
+    "webpack-merge": "^4.2.1"
+  },
+  "keywords": [
+    "volante"
+  ]
+}
