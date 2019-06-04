@@ -8,22 +8,38 @@ module.exports = {
 	name: 'VolanteDashboard',
   init() {
 	},
+	data: {
+		io: null,
+	},
 	events: {
+		// point VolanteExpress to the dist files for the static-built dashboard
 		'VolanteExpress.update'() {
 			if (require.main !== module) {
 				this.$emit('VolanteExpress.use', express.static(__dirname + '/dist'));
 			}
 		},
+		// start socket.io when express is ready
 		'VolanteExpress.listening'(obj) {
 			this.startSocketIO(obj.server);
-		}
+		},
+		// catch all volante events and forward to browser
+		'*'(...args) {
+			if (this.io) {
+				this.io.emit('*', ...args);
+			}
+		},
 	},
 	methods: {
 		startSocketIO(server) {
-			const io = require('socket.io')(server);
-			io.on('connection', client => {
-			  client.on('event', data => { /* … */ });
-			  client.on('disconnect', () => { /* … */ });
+			this.$debug('adding socket.io');
+			this.io = require('socket.io')(server);
+			this.io.on('connection', client => {
+			  client.on('event', data => {
+			  	console.log('event', data);
+		  	});
+			  client.on('disconnect', () => {
+			  	console.log('client disconnect');
+			  });
 			});
 		},
 	},
@@ -60,6 +76,8 @@ if (require.main === module) {
 		  }),
 		],
 	});
-
+	hub.on('VolanteExpress.listening', (o) => {
+		console.log(`listening on http://${o.bind}:${o.port}`);
+	});
 	hub.emit('VolanteExpress.start');
 }
