@@ -10,6 +10,7 @@ module.exports = {
 	},
 	props: {
 		title: 'volante',
+		version: '0.0.0',
 	},
 	data: {
 		io: null,
@@ -39,7 +40,10 @@ module.exports = {
 			this.io = require('socket.io')(server);
 			this.io.on('connection', client => {
 				this.$debug('socket.io client connect');
-				client.emit('volante-dashboard.title', this.title);
+				client.emit('volante-dashboard.info', {
+					title: this.title,
+					version: this.version,
+				});
 			  client.on('event', data => {
 			  	this.$debug('socket.io event', data);
 		  	});
