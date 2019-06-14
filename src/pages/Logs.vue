@@ -34,7 +34,7 @@
 						<td>
 							<span v-for="o in item.msg" class="align-left">
 								<vuestro-pill v-if="typeof(o) == 'string'" :title="o"></vuestro-pill>
-								<vuestro-pill v-else v-for="(v,k) in o" :key="k" :title="k" :value="v"></vuestro-pill>
+								<vuestro-object-browser v-else :data="o"></vuestro-object-browser>
 							</span>
 						</td>
 					</template>
