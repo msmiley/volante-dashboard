@@ -24,6 +24,7 @@ const webpackConfig = merge(baseWebpackConfig, {
     ],
   },
   output: {
+    publicPath: '/dashboard/',
     filename: 'static/js/[name].[chunkhash].js',
     chunkFilename: 'static/js/[name].[chunkhash].js'
   },
@@ -58,7 +59,7 @@ const webpackConfig = merge(baseWebpackConfig, {
   optimization: {
     minimizer: [
       new TerserPlugin({
-        sourceMap: true, 
+        sourceMap: true,
       }),
     ],
     // split vendor js files into separate chunks

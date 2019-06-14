@@ -9,22 +9,23 @@ Vue.component('icon', Icon);
 
 import Dashboard from '../pages/Dashboard';
 import Events from '../pages/Events';
-import Spokes from '../pages/Spokes';
+import Topology from '../pages/Topology';
 import Logs from '../pages/Logs';
 
 export default new Router({
+  base: '/dashboard',
   mode: 'history',
   routes: [
-    {
-      meta: {
-        title: 'Dashboard',
-        icon: 'tachometer-alt',
-        sidebar: true,
-      },
-      name: 'dashboard',
-      path: '/dashboard',
-      component: Dashboard,
-    },
+    // {
+    //   meta: {
+    //     title: 'Dashboard',
+    //     icon: 'tachometer-alt',
+    //     sidebar: true,
+    //   },
+    //   name: 'dashboard',
+    //   path: '/dashboard',
+    //   component: Dashboard,
+    // },
     {
       meta: {
         title: 'Events',
@@ -35,16 +36,16 @@ export default new Router({
       path: '/events',
       component: Events,
     },
-    {
-      meta: {
-        title: 'Spokes',
-        icon: 'asterisk',
-        sidebar: true,
-      },
-      name: 'spokes',
-      path: '/spokes',
-      component: Spokes,
-    },
+    // {
+    //   meta: {
+    //     title: 'Topology',
+    //     icon: 'asterisk',
+    //     sidebar: true,
+    //   },
+    //   name: 'topology',
+    //   path: '/topology',
+    //   component: Topology,
+    // },
     {
       meta: {
         title: 'Logs',
@@ -56,7 +57,7 @@ export default new Router({
       component: Logs,
     },
 
-    { path: '/*', redirect: '/dashboard' } // redirect to dashboard
+    { path: '/*', redirect: '/events' } // redirect to dashboard
   ],
 });
 

@@ -13,5 +13,10 @@ export default {
       store.dispatch('addEvent', args);
     });
 
+    Vue.socket.on('volante-dashboard.info', (d) => {
+      store.dispatch('setTitle', d.title);
+      store.dispatch('setVersion', d.version);
+    });
+
   }
 };

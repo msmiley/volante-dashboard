@@ -1,20 +1,27 @@
 <template>
-  <vuestro-app title="volante">
+  <vuestro-app :title="title">
+
+    <template slot="footer">
+      <div class="default-footer"><strong>{{ title }} v{{ version }}</strong> powered by volante-dashboard v{{ dashboardVersion }} <img :src="logo"/></div>
+    </template>
 
   </vuestro-app>
 </template>
 
 <script>
 
-/* global __VERSION__ */
+/* global __VERSION__, Vuex */
 
 export default {
   name: 'app',
   data() {
     return {
-      version: __VERSION__,
+      dashboardVersion: __VERSION__,
       logo: require('@/assets/volante.svg'),
     };
+  },
+  computed: {
+    ...Vuex.mapGetters(['title', 'version']),
   },
 };
 </script>
@@ -31,6 +38,16 @@ body {
   right: 0;
   display: flex;
   flex-direction: column;
+}
+
+.default-footer {
+  font-size: 13px;
+  text-align: right;
+  padding: 5px;
+}
+.default-footer img {
+  width: 13px;
+  height: 13px;
 }
 
 </style>

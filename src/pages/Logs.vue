@@ -1,9 +1,20 @@
 <template>
-	<vuestro-card-container>
+	<vuestro-container>
 		<vuestro-card color="var(--vuestro-indigo)">
-			<template #heading>Logs</template>
+			<template #heading>
+				<span>Logs</span>
+				<span class="log-toolbar">
+					<vuestro-button pill no-border size="sm" @click="clearLogEvents">
+						<icon name="ban"></icon>
+						<span>Clear</span>
+					</vuestro-button>
+				</span>
+			</template>
 			<vuestro-panel stretch>
 				<vuestro-table :data="logEvents" :columns="columns">
+					<template #no-data>
+						No log messages
+					</template>
 					<template #row="{ item }">
 						<td>
 							<span class="ts-format">
@@ -22,14 +33,15 @@
 						</td>
 						<td>
 							<span v-for="o in item.msg" class="align-left">
-								<vuestro-pill v-for="(v,k) in o" :title="k" :value="v"></vuestro-pill>
+								<vuestro-pill v-if="typeof(o) == 'string'" :title="o"></vuestro-pill>
+								<vuestro-pill v-else v-for="(v,k) in o" :key="k" :title="k" :value="v"></vuestro-pill>
 							</span>
 						</td>
 					</template>
 				</vuestro-table>
 			</vuestro-panel>
 		</vuestro-card>
-	</vuestro-card-container>
+	</vuestro-container>
 </template>
 
 <script>
@@ -67,6 +79,7 @@ export default {
 		...Vuex.mapGetters(["logEvents"]),
 	},
 	methods: {
+		...Vuex.mapActions(['clearLogEvents']),
 		getLevelColor(l) {
 			switch (l) {
 				case 'normal':
@@ -96,6 +109,10 @@ export default {
 	padding: 0 10px;
 	font-weight: 500;
 	color: var(--vuestro-text-color-muted);
+}
+
+.log-toolbar {
+	font-size: 13px;
 }
 
 </style>

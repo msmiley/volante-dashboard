@@ -1,15 +1,24 @@
 <template>
-	<vuestro-card-container no-wrap>
+	<vuestro-container no-wrap shrink class="events-container">
 		<vuestro-card cols="3" color="var(--vuestro-green)">
-			<template #heading>Events</template>
+			<template #heading>
+				<span>Events</span>
+				<span class="list-toolbar">
+					<vuestro-button pill no-border size="sm" @click="onClear">
+						<icon name="ban"></icon>
+						<span>Clear</span>
+					</vuestro-button>
+				</span>
+			</template>
 			<template #description>
 			</template>
-			<div>
+			<div class="events-sidebar">
 				<div>
-					<vuestro-search-box history></vuestro-search-box>
+					<vuestro-search-box history placeholder="Search" v-model="searchTerm" @input="onSearch"></vuestro-search-box>
 				</div>
 				<div class="events-list">
-					<div v-for="e in allEvents" class="event">
+					<div v-if="filteredEvents.length == 0" class="no-data">No events, yet...</div>
+					<div v-for="(e, idx) in filteredEvents" class="event" @click="onSelectEvent(idx, e)" :class="{ selected: idx == currentIdx }">
 						<div class="type">{{ e.eventType }}</div>
 						<div>{{ e.ts | vuestroHMS }}</div>
 					</div>
@@ -18,26 +27,77 @@
 		</vuestro-card>
 		<vuestro-card cols="9">
 			<vuestro-panel stretch>
-
+				<template #title>Event Data</template>
+				<template #toolbar>
+					<vuestro-button round no-border size="sm" @click="onDownload"><icon name="download"></icon></vuestro-button>
+				</template>
+				<div v-if="Object.keys(currentObject).length === 0" class="no-data">Select an event to view the data object</div>
+				<vuestro-object-browser :data="currentObject"></vuestro-object-browser>
 			</vuestro-panel>
 		</vuestro-card>
-	</vuestro-card-container>
+	</vuestro-container>
 </template>
 
 <script>
 
-/* global Vuex */
+/* global _, Vuex */
 
 export default {
 	name: 'Events',
 	computed: {
-		...Vuex.mapGetters(["allEvents"]),
+		...Vuex.mapGetters(['events']),
+		filteredEvents() {
+			if (this.searchTerm.length == 0) {
+				return this.events;
+			} else {
+				return _.filter(this.events, (d) => {
+					return JSON.stringify(d).indexOf(this.searchTerm) > -1;
+				});
+			}
+		}
 	},
+	data() {
+		return {
+			searchTerm: '',
+			currentObject: {},
+			currentIdx: -1,
+		};
+	},
+	methods: {
+		...Vuex.mapActions(['clearEvents']),
+		onClear() {
+			this.clearEvents();
+			this.currentIdx = -1;
+			this.currentObject = {};
+		},
+		onSelectEvent(idx, d) {
+			this.currentIdx = idx;
+			this.currentObject = d;
+		},
+		onSearch() {
+			if (this.searchTerm.length > 0) {
+				this.currentObject = {};
+			}
+		},
+		onDownload() {
+			var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(this.currentObject,null,2));
+	    var downloadAnchorNode = document.createElement('a');
+	    downloadAnchorNode.setAttribute("href",     dataStr);
+	    downloadAnchorNode.setAttribute("download", "event.json");
+	    document.body.appendChild(downloadAnchorNode); // required for firefox
+	    downloadAnchorNode.click();
+	    downloadAnchorNode.remove();
+		},
+	}
 };
 
 </script>
 
 <style scoped>
+
+.events-container {
+	overflow: hidden;
+}
 
 .event {
 	padding: 5px 10px;
@@ -46,12 +106,32 @@ export default {
 	justify-content: space-between;
 	cursor: pointer;
 }
+.event.selected {
+	background-color: var(--vuestro-active);
+}
 .event:hover {
 	background-color: var(--vuestro-hover);
 }
 .event > .type {
 	font-weight: 600;
 	color: var(--vuestro-indigo);
+}
+.events-sidebar {
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
+}
+.events-list {
+	overflow: auto;
+}
+.no-data {
+	font-size: 22px;
+	font-weight: 300;
+	text-align: center;
+	padding: 20px;
+}
+.list-toolbar {
+	font-size: 13px;
 }
 
 </style>

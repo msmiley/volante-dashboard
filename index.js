@@ -8,6 +8,9 @@ module.exports = {
 	name: 'VolanteDashboard',
   init() {
 	},
+	props: {
+		title: 'volante',
+	},
 	data: {
 		io: null,
 	},
@@ -15,7 +18,8 @@ module.exports = {
 		// point VolanteExpress to the dist files for the static-built dashboard
 		'VolanteExpress.update'() {
 			if (require.main !== module) {
-				this.$emit('VolanteExpress.use', express.static(__dirname + '/dist'));
+				this.$emit('VolanteExpress.use', '/dashboard', require('connect-history-api-fallback')());
+				this.$emit('VolanteExpress.use', '/dashboard', express.static(__dirname + '/dist'));
 			}
 		},
 		// start socket.io when express is ready
@@ -34,11 +38,13 @@ module.exports = {
 			this.$debug('adding socket.io');
 			this.io = require('socket.io')(server);
 			this.io.on('connection', client => {
+				this.$debug('socket.io client connect');
+				client.emit('volante-dashboard.title', this.title);
 			  client.on('event', data => {
-			  	console.log('event', data);
+			  	this.$debug('socket.io event', data);
 		  	});
 			  client.on('disconnect', () => {
-			  	console.log('client disconnect');
+			  	this.$debug('socket.io client disconnect');
 			  });
 			});
 		},
@@ -50,10 +56,6 @@ if (require.main === module) {
 	const volante = require('volante');
 
 	let hub = new volante.Hub().debug();
-
-	hub.on('volante.log', (d) => {
-		console.log(d);
-	});
 
 	hub.attachAll().attachFromObject(module.exports);
 
@@ -80,4 +82,13 @@ if (require.main === module) {
 		console.log(`listening on http://${o.bind}:${o.port}`);
 	});
 	hub.emit('VolanteExpress.start');
+
+	// set up some timers for fake events
+	let cnt = 0;
+	setInterval(() => {
+		hub.emit(`testevent-${cnt}`, {
+			count: cnt++,
+		});
+	}, 5000);
+
 }
