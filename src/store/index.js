@@ -48,7 +48,7 @@ export default new Vuex.Store({
     },
     addEvent(state, eventArgs) {
       let eventType = eventArgs[0];
-      let eventObj = eventArgs[1];
+      let eventObj = eventArgs.slice(1);
       if (eventType === 'volante.log') {
         state.logEvents.push({
           ts: new Date(),
