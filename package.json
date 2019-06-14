@@ -10,7 +10,7 @@
   "scripts": {
     "dev": "npm start",
     "start": "node index.js",
-    "prepare": "webpack --config ./build/webpack.prod.config.js"
+    "prepare": "rm -rf dist/ && webpack --config ./build/webpack.prod.config.js"
   },
   "dependencies": {
     "express": "^4.16.4",
