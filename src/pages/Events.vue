@@ -26,13 +26,15 @@
 			</div>
 		</vuestro-card>
 		<vuestro-card cols="9">
-			<vuestro-panel stretch>
+			<vuestro-panel stretch class="event-data-panel">
 				<template #title>Event Data</template>
 				<template #toolbar>
 					<vuestro-button round no-border size="sm" @click="onDownload"><icon name="download"></icon></vuestro-button>
 				</template>
-				<div v-if="Object.keys(currentObject).length === 0" class="no-data">Select an event to view the data object</div>
-				<vuestro-object-browser expand-all :data="currentObject"></vuestro-object-browser>
+				<div class="event-data">
+					<div v-if="Object.keys(currentObject).length === 0" class="no-data">Select an event to view the data object</div>
+					<vuestro-object-browser expand-all :data="currentObject"></vuestro-object-browser>
+				</div>
 			</vuestro-panel>
 		</vuestro-card>
 	</vuestro-container>
@@ -132,6 +134,15 @@ export default {
 }
 .list-toolbar {
 	font-size: 13px;
+}
+.event-data-panel {
+	overflow: hidden;
+}
+.event-data-panel >>> .vuestro-panel-contents {
+	overflow: hidden;
+}
+.event-data {
+	overflow: auto;
 }
 
 </style>

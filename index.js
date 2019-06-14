@@ -92,6 +92,22 @@ if (require.main === module) {
 	setInterval(() => {
 		hub.emit(`testevent-${cnt}`, {
 			count: cnt++,
+			count1: cnt++,
+			count2: cnt++,
+			count3: cnt++,
+			count4: cnt++,
+			count5: cnt++,
+			count6: cnt++,
+			count7: cnt++,
+			count8: cnt++,
+			count9: cnt++,
+			count10: cnt++,
+			count11: cnt++,
+			count12: cnt++,
+			count13: cnt++,
+			count14: cnt++,
+			count15: cnt++,
+			count16: cnt++,
 		});
 	}, 5000);
 
