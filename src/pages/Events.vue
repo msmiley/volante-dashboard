@@ -32,7 +32,7 @@
 					<vuestro-button round no-border size="sm" @click="onDownload"><icon name="download"></icon></vuestro-button>
 				</template>
 				<div v-if="Object.keys(currentObject).length === 0" class="no-data">Select an event to view the data object</div>
-				<vuestro-object-browser :data="currentObject"></vuestro-object-browser>
+				<vuestro-object-browser expand-all :data="currentObject"></vuestro-object-browser>
 			</vuestro-panel>
 		</vuestro-card>
 	</vuestro-container>
