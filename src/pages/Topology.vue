@@ -34,6 +34,7 @@ export default {
     return {
       graphOptions: {
         labels: true,
+        distance: 100,
       },
       selectedSpoke: {},
     };
