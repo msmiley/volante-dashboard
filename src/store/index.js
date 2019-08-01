@@ -7,6 +7,17 @@ export default new Vuex.Store({
     version: '0.0.0',
     events: [],
     logEvents: [],
+    stats: [],
+    uptime: null,
+    topology: [],
+    topologyNodelist: {
+      nodes: [
+        {
+          name: 'Volante Hub'
+        }
+      ],
+      links: [],
+    },
   },
   getters: {
     title(state) {
@@ -19,8 +30,23 @@ export default new Vuex.Store({
       return state.events;
     },
     logEvents(state) {
-      return _.flatMap(state.logEvents, 'eventObj');
+      return state.logEvents;
     },
+    stats(state) {
+      return state.stats;
+    },
+    uptime(state) {
+      return state.uptime;
+    },
+    topology(state) {
+      return state.topology;
+    },
+    topologyNodelist(state) {
+      return state.topologyNodelist;
+    },
+    lastEvent(state) {
+      return state.events[state.events.length-1];
+    }
   },
   actions: {
     setTitle({ commit }, title) {
@@ -37,6 +63,15 @@ export default new Vuex.Store({
     },
     clearLogEvents({ commit }) {
       commit('clearLogEvents');
+    },
+    setStats({ commit }, stats) {
+      commit('setStats', stats);
+    },
+    setUptime({ commit }, uptime) {
+      commit('setUptime', uptime);
+    },
+    setTopology({ commit }, topology) {
+      commit('setTopology', topology);
     },
   },
   mutations: {
@@ -68,6 +103,31 @@ export default new Vuex.Store({
     },
     clearLogEvents(state) {
       state.logEvents = [];
+    },
+    setStats(state, stats) {
+      state.stats = stats;
+    },
+    setUptime(state, uptime) {
+      state.uptime = uptime;
+    },
+    setTopology(state, topology) {
+      state.topology = topology;
+      state.topologyNodelist = {
+        nodes: [
+          {
+            name: 'Volante Hub'
+          }
+        ],
+        links: [],
+      };
+      let cnt = 1;
+      for (let t of topology) {
+        state.topologyNodelist.nodes.push(t);
+        state.topologyNodelist.links.push({
+          source: 0,
+          target: cnt++,
+        });
+      }
     },
   },
 });

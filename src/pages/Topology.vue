@@ -1,17 +1,76 @@
 <template>
-  <vuestro-container no-wrap>
-    
+  <vuestro-container no-wrap column shrink class="topology-container">
+    <vuestro-card cols="6" color="var(--vuestro-gold)">
+      <template #heading>
+        Topology
+				<vuestro-button round no-border size="sm" @click="vuestroDownloadAsJson(topology, 'topology.json')">
+					<vuestro-icon name="download"></vuestro-icon>
+				</vuestro-button>
+      </template>
+      <vuestro-force-graph :data="topologyNodelist" :options="graphOptions" @select="onSelectSpoke"></vuestro-force-graph>
+    </vuestro-card>
+    <vuestro-card cols="6" overflow-hidden>
+      <vuestro-panel stretch scroll>
+        <template #title>Module Data</template>
+        <template #toolbar>
+					<vuestro-button pill no-border @click="$refs.ob.expandAll()"><vuestro-icon name="plus"></vuestro-icon><span>Expand All</span></vuestro-button>
+					<vuestro-button pill no-border @click="$refs.ob.collapseAll()"><vuestro-icon name="minus"></vuestro-icon><span>Collapse All</span></vuestro-button>
+					<vuestro-button round no-border size="sm" @click="vuestroDownloadAsJson(selectedSpoke, 'spoke.json')"><vuestro-icon name="download"></vuestro-icon></vuestro-button>
+				</template>
+				<div v-if="Object.keys(selectedSpoke).length == 0" class="no-data">Select a module to see its current state</div>
+        <vuestro-object-browser v-else ref="ob" :data="selectedSpoke" start-expanded></vuestro-object-browser>
+      </vuestro-panel>
+    </vuestro-card>
   </vuestro-container>
 </template>
 
 <script>
 
+/* global Vuex, _ */
+
 export default {
-  name: 'Spokes',
+  name: 'Topology',
+  data() {
+    return {
+      graphOptions: {
+        labels: true,
+      },
+      selectedSpoke: {},
+    };
+  },
+  computed: {
+    ...Vuex.mapGetters(['topology', 'topologyNodelist']),
+  },
+  watch: {
+    topologyNodelist() {
+      this.updateSelectedSpoke();
+    },
+  },
+  methods: {
+    onSelectSpoke(d) {
+      this.selectedSpoke = d;
+    },
+    updateSelectedSpoke() {
+      if (this.selectedSpoke && this.selectedSpoke.name) {
+        this.selectedSpoke = _.find(this.topology, { name: this.selectedSpoke.name });
+      }
+    },
+  }
 };
 
 </script>
 
 <style scoped>
-  
+
+.topology-container {
+	overflow: hidden;
+}
+
+.no-data {
+  font-size: 24px;
+  font-weight: 200;
+  align-self: center;
+  margin-top: 10px;
+}
+
 </style>

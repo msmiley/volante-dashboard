@@ -2,16 +2,15 @@
 	<vuestro-container>
 		<vuestro-card color="var(--vuestro-indigo)">
 			<template #heading>
-				<span>Logs</span>
+				<span>Stats</span>
 				<span class="log-toolbar">
-					<vuestro-button pill no-border size="sm" @click="clearLogEvents">
-						<vuestro-icon name="ban"></vuestro-icon>
-						<span>Clear</span>
+					<vuestro-button round no-border size="sm" @click="vuestroDownloadAsJson(stats, 'stats.json')">
+						<vuestro-icon name="download"></vuestro-icon>
 					</vuestro-button>
 				</span>
 			</template>
 			<vuestro-panel stretch>
-				<vuestro-table :data="filteredLogEvents" :columns="columns">
+				<vuestro-table :data="stats" :columns="columns">
 					<template #no-data>
 						No log messages
 					</template>
@@ -22,20 +21,13 @@
 							</span>
 						</td>
 						<td>
-							<span class="align-left">
-								<vuestro-pill :title="item.lvl" :color="getLevelColor(item.lvl)"></vuestro-pill>
-							</span>
+							<div class="text-center">{{ item.events }}</div>
 						</td>
 						<td>
-							<span class="align-left">
-								<vuestro-pill :title="item.src" color="var(--vuestro-purple)"></vuestro-pill>
-							</span>
+							<div class="text-center">{{ item.cpu }}%</div>
 						</td>
 						<td>
-							<span v-for="o in item.msg" class="align-left">
-								<vuestro-pill v-if="typeof(o) == 'string'" :title="o"></vuestro-pill>
-								<vuestro-object-browser v-else :data="o"></vuestro-object-browser>
-							</span>
+							<div class="text-center">{{ item.memory | vuestroBytes }}</div>
 						</td>
 					</template>
 				</vuestro-table>
@@ -49,7 +41,7 @@
 /* global Vuex */
 
 export default {
-	name: 'Logs',
+	name: 'Stats',
 	data() {
 		return {
 			columns: [
@@ -59,30 +51,27 @@ export default {
 					sortable: true,
 				},
 				{
-					title: 'Level',
-					field: 'lvl',
+					title: 'Event Count',
+					field: 'events',
 					sortable: true,
 				},
 				{
-					title: 'Source',
-					field: 'src',
+					title: 'CPU Usage',
+					field: 'cpu',
 					sortable: true,
 				},
 				{
-					title: 'Message',
-					field: 'msg'
+					title: 'Memory Usage',
+					field: 'memory',
+					sortable: true,
 				},
 			]
 		};
 	},
 	computed: {
-		...Vuex.mapGetters(["logEvents"]),
-		filteredLogEvents() {
-			return _.flatMap(this.logEvents, 'eventObj');
-		}
+		...Vuex.mapGetters(["stats"]),
 	},
 	methods: {
-		...Vuex.mapActions(['clearLogEvents']),
 		getLevelColor(l) {
 			switch (l) {
 				case 'normal':
@@ -94,7 +83,7 @@ export default {
 				default:
 					return 'var(--vuestro-info)';
 			}
-		}
+		},
 	}
 };
 
@@ -102,9 +91,8 @@ export default {
 
 <style scoped>
 
-.align-left {
-	display: flex;
-	flex-wrap: wrap;
+.text-center {
+	text-align: center;
 }
 
 .ts-format {

@@ -5,7 +5,7 @@
 				<span>Events</span>
 				<span class="list-toolbar">
 					<vuestro-button pill no-border size="sm" @click="onClear">
-						<icon name="ban"></icon>
+						<vuestro-icon name="ban"></vuestro-icon>
 						<span>Clear</span>
 					</vuestro-button>
 				</span>
@@ -29,11 +29,13 @@
 			<vuestro-panel stretch class="event-data-panel">
 				<template #title>Event Data</template>
 				<template #toolbar>
-					<vuestro-button round no-border size="sm" @click="onDownload"><icon name="download"></icon></vuestro-button>
+					<vuestro-button pill no-border @click="$refs.ob.expandAll()"><vuestro-icon name="plus"></vuestro-icon><span>Expand All</span></vuestro-button>
+					<vuestro-button pill no-border @click="$refs.ob.collapseAll()"><vuestro-icon name="minus"></vuestro-icon><span>Collapse All</span></vuestro-button>
+					<vuestro-button round no-border size="sm" @click="vuestroDownloadAsJson(currentObject, 'event.json')"><vuestro-icon name="download"></vuestro-icon></vuestro-button>
 				</template>
 				<div class="event-data">
 					<div v-if="Object.keys(currentObject).length === 0" class="no-data">Select an event to view the data object</div>
-					<vuestro-object-browser expand-all :data="currentObject"></vuestro-object-browser>
+					<vuestro-object-browser ref="ob" expand-all :data="currentObject"></vuestro-object-browser>
 				</div>
 			</vuestro-panel>
 		</vuestro-card>
@@ -80,15 +82,6 @@ export default {
 			if (this.searchTerm.length > 0) {
 				this.currentObject = {};
 			}
-		},
-		onDownload() {
-			var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(this.currentObject,null,2));
-	    var downloadAnchorNode = document.createElement('a');
-	    downloadAnchorNode.setAttribute("href",     dataStr);
-	    downloadAnchorNode.setAttribute("download", "event.json");
-	    document.body.appendChild(downloadAnchorNode); // required for firefox
-	    downloadAnchorNode.click();
-	    downloadAnchorNode.remove();
 		},
 	}
 };

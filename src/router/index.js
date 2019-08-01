@@ -11,21 +11,22 @@ import Dashboard from '../pages/Dashboard';
 import Events from '../pages/Events';
 import Topology from '../pages/Topology';
 import Logs from '../pages/Logs';
+import Stats from '../pages/Stats';
 
 export default new Router({
   base: '/dashboard',
   mode: 'history',
   routes: [
-    // {
-    //   meta: {
-    //     title: 'Dashboard',
-    //     icon: 'tachometer-alt',
-    //     sidebar: true,
-    //   },
-    //   name: 'dashboard',
-    //   path: '/dashboard',
-    //   component: Dashboard,
-    // },
+    {
+      meta: {
+        title: 'Dashboard',
+        icon: 'tachometer-alt',
+        sidebar: true,
+      },
+      name: 'dashboard',
+      path: '/dashboard',
+      component: Dashboard,
+    },
     {
       meta: {
         title: 'Events',
@@ -36,16 +37,26 @@ export default new Router({
       path: '/events',
       component: Events,
     },
-    // {
-    //   meta: {
-    //     title: 'Topology',
-    //     icon: 'asterisk',
-    //     sidebar: true,
-    //   },
-    //   name: 'topology',
-    //   path: '/topology',
-    //   component: Topology,
-    // },
+    {
+      meta: {
+        title: 'Topology',
+        icon: 'asterisk',
+        sidebar: true,
+      },
+      name: 'topology',
+      path: '/topology',
+      component: Topology,
+    },
+    {
+      meta: {
+        title: 'Stats',
+        icon: 'digital-tachograph',
+        sidebar: true,
+      },
+      name: 'stats',
+      path: '/stats',
+      component: Stats,
+    },
     {
       meta: {
         title: 'Logs',
@@ -57,7 +68,7 @@ export default new Router({
       component: Logs,
     },
 
-    { path: '/*', redirect: '/events' } // redirect to dashboard
+    { path: '/*', redirect: '/dashboard' } // redirect to dashboard
   ],
 });
 

@@ -1,7 +1,11 @@
 <template>
   <vuestro-app :title="title">
 
-    <template slot="footer">
+    <template #navbar-slot>
+      <navbar-stats></navbar-stats>
+    </template>
+
+    <template #footer>
       <div class="default-footer"><strong>{{ title }} v{{ version }}</strong> powered by volante-dashboard v{{ dashboardVersion }} <img :src="logo"/></div>
     </template>
 
@@ -12,8 +16,13 @@
 
 /* global __VERSION__, Vuex */
 
+import NavbarStats from '@/components/NavbarStats';
+
 export default {
   name: 'app',
+  components: {
+    NavbarStats,
+  },
   data() {
     return {
       dashboardVersion: __VERSION__,

@@ -7,13 +7,29 @@ const express = require('express');
 module.exports = {
 	name: 'VolanteDashboard',
   init() {
+  	this.updateStats();
+  	this.timer = setInterval(() => {
+  		this.updateStats();
+  		this.sendVolanteInfo(this.io);
+		}, this.statsInterval);
+	},
+	done() {
+		this.timer && clearInterval(this.timer);
 	},
 	props: {
 		title: 'volante',
 		version: '0.0.0',
+		statsInterval: 5000,
+		statsHistory: 60,
 	},
 	data: {
 		io: null,
+		timer: null,
+		lasthrtime: process.hrtime(),
+		lastUsage: process.cpuUsage(),
+		totalEvents: 0,
+		lastEvents: 0,
+		stats: [],
 	},
 	events: {
 		// point VolanteExpress to the dist files for the static-built dashboard
@@ -27,8 +43,10 @@ module.exports = {
 		'VolanteExpress.listening'(obj) {
 			this.startSocketIO(obj.server);
 		},
-		// catch all volante events and forward to browser
+		// catch all volante events and forward to all browsers
 		'*'(...args) {
+			this.lastEvents++;
+			this.totalEvents++;
 			if (this.io) {
 				this.io.emit('*', ...args);
 			}
@@ -44,6 +62,7 @@ module.exports = {
 					title: this.title,
 					version: this.version,
 				});
+				this.sendVolanteInfo(client);
 			  client.on('event', data => {
 			  	this.$debug('socket.io event', data);
 		  	});
@@ -52,6 +71,41 @@ module.exports = {
 			  });
 			});
 		},
+		updateStats() {
+			// update last values
+			this.lasthrtime = process.hrtime(this.lasthrtime);
+			this.lastUsage = process.cpuUsage(this.lastUsage);
+
+			// calculate cpu
+			let elapTimeMS = this.hrtimeToMS(this.lasthrtime);
+			let elapUserMS = this.lastUsage.user / 1000;
+			let elapSysMS = this.lastUsage.system / 1000;
+			let cpuPerc = Math.round(100 * (elapUserMS + elapSysMS) / elapTimeMS);
+
+			this.stats.push({
+				ts: new Date(),
+				events: this.lastEvents,
+				cpu: cpuPerc,
+				memory: process.memoryUsage().rss,
+			});
+			// slice stats to length=statsHistory
+			if (this.stats.length > this.statsHistory) {
+				this.stats.shift();
+			}
+			// reset interval event counter
+			this.lastEvents = 0;
+		},
+		sendVolanteInfo(dest) {
+			let info = {
+				wheel: this.$hub.getAttached(),
+				uptime: this.$hub.getUptime(),
+				stats: this.stats,
+			};
+			dest.emit('volante.info', info);
+		},
+		hrtimeToMS(hrtime) {
+			return hrtime[0] * 1000 + hrtime[1] / 1000000;
+		}
 	},
 };
 
@@ -62,6 +116,18 @@ if (require.main === module) {
 	let hub = new volante.Hub().debug();
 
 	hub.attachAll().attachFromObject(module.exports);
+	
+	hub.attachFromObject({
+		name: 'TestSpoke',
+		init() {
+			setInterval(() => {
+				this.counter++;
+			}, 1000);
+		},
+		props: {
+			counter: 0,
+		},
+	});
 
 	// set up hot-reload webpack environment for dev
 	const webpack = require('webpack');
