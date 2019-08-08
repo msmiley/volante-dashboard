@@ -21,6 +21,8 @@ module.exports = {
 		version: '0.0.0',
 		statsInterval: 5000,
 		statsHistory: 60,
+		user: '',
+		pass: '',
 	},
 	data: {
 		io: null,
@@ -35,6 +37,22 @@ module.exports = {
 		// point VolanteExpress to the dist files for the static-built dashboard
 		'VolanteExpress.update'() {
 			if (require.main !== module) {
+				this.$emit('VolanteExpress.use', '/dashboard/*', (req, res, next) => {
+					if (this.user.length > 0 && this.pass.length > 0) {
+						if (req.headers.authorization) {
+							// check authorization header
+							let userpass = Buffer.from(req.headers.authorization.split('Basic ')[1], 'base64').toString();
+							let [user, pass] = userpass.split(':');
+							if (user === this.user && pass === this.pass) {
+								return next();
+							}
+						}
+						res.set('WWW-Authenticate', 'Basic');
+						res.status(401).send();
+					} else {
+						next();
+					}
+				});
 				this.$emit('VolanteExpress.use', '/dashboard', require('connect-history-api-fallback')());
 				this.$emit('VolanteExpress.use', '/dashboard', express.static(__dirname + '/dist'));
 			}
@@ -116,7 +134,7 @@ if (require.main === module) {
 	let hub = new volante.Hub().debug();
 
 	hub.attachAll().attachFromObject(module.exports);
-	
+
 	hub.attachFromObject({
 		name: 'TestSpoke',
 		init() {
