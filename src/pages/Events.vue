@@ -3,7 +3,11 @@
 		<vuestro-card cols="3" color="var(--vuestro-green)">
 			<template #heading>
 				<span>Events</span>
-				<span class="list-toolbar">
+				<span class="events-toolbar">
+					<vuestro-button pill no-border size="sm" @click="createOpen = true">
+						<vuestro-icon name="plus"></vuestro-icon>
+						<span>Create</span>
+					</vuestro-button>
 					<vuestro-button pill no-border size="sm" @click="onClear">
 						<vuestro-icon name="ban"></vuestro-icon>
 						<span>Clear</span>
@@ -39,15 +43,20 @@
 				</div>
 			</vuestro-panel>
 		</vuestro-card>
+		<send-event :active.sync="createOpen"/>
 	</vuestro-container>
 </template>
 
 <script>
 
 /* global _, Vuex */
+import SendEvent from '@/components/SendEvent';
 
 export default {
 	name: 'Events',
+	components: {
+		SendEvent,
+	},
 	computed: {
 		...Vuex.mapGetters(['events']),
 		filteredEvents() {
@@ -62,6 +71,7 @@ export default {
 	},
 	data() {
 		return {
+			createOpen: false,
 			searchTerm: '',
 			currentObject: {},
 			currentIdx: -1,
@@ -125,7 +135,8 @@ export default {
 	text-align: center;
 	padding: 20px;
 }
-.list-toolbar {
+.events-toolbar {
+	display: flex;
 	font-size: 13px;
 }
 .event-data-panel {

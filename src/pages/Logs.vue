@@ -46,7 +46,7 @@
 
 <script>
 
-/* global Vuex */
+/* global Vuex, _ */
 
 export default {
 	name: 'Logs',
@@ -90,7 +90,7 @@ export default {
 				case 'warning':
 					return 'var(--vuestro-warning)';
 				case 'error':
-					return 'var(--vuestro-critical)';
+					return 'var(--vuestro-danger)';
 				default:
 					return 'var(--vuestro-info)';
 			}

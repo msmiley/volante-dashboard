@@ -48,10 +48,9 @@ module.exports = {
 							}
 						}
 						res.set('WWW-Authenticate', 'Basic');
-						res.status(401).send();
-					} else {
-						next();
+						return res.status(401).send();
 					}
+					next();
 				});
 				this.$emit('VolanteExpress.use', '/dashboard', require('connect-history-api-fallback')());
 				this.$emit('VolanteExpress.use', '/dashboard', express.static(__dirname + '/dist'));
@@ -74,15 +73,17 @@ module.exports = {
 		startSocketIO(server) {
 			this.$debug('adding socket.io');
 			this.io = require('socket.io')(server);
-			this.io.on('connection', client => {
+			this.io.on('connection', (client) => {
 				this.$debug('socket.io client connect');
 				client.emit('volante-dashboard.info', {
 					title: this.title,
 					version: this.version,
 				});
 				this.sendVolanteInfo(client);
-			  client.on('event', data => {
-			  	this.$debug('socket.io event', data);
+				// receive events from client side to re-emit on volante
+			  client.on('event', (data) => {
+			  	this.$debug('socket.io event from client', data);
+			  	this.$emit(data.eventType, data.eventObj);
 		  	});
 			  client.on('disconnect', () => {
 			  	this.$debug('socket.io client disconnect');
