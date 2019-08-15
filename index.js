@@ -37,7 +37,7 @@ module.exports = {
 		// point VolanteExpress to the dist files for the static-built dashboard
 		'VolanteExpress.update'() {
 			if (require.main !== module) {
-				this.$emit('VolanteExpress.use', '/dashboard/*', (req, res, next) => {
+				this.$emit('VolanteExpress.use', '/dashboard', (req, res, next) => {
 					if (this.user.length > 0 && this.pass.length > 0) {
 						if (req.headers.authorization) {
 							// check authorization header
@@ -52,7 +52,9 @@ module.exports = {
 					}
 					next();
 				});
-				this.$emit('VolanteExpress.use', '/dashboard', require('connect-history-api-fallback')());
+				this.$emit('VolanteExpress.use', '/dashboard', require('connect-history-api-fallback')({
+					index: '//index.html',
+				}));
 				this.$emit('VolanteExpress.use', '/dashboard', express.static(__dirname + '/dist'));
 			}
 		},
