@@ -18,18 +18,29 @@
 					<vuestro-button round no-border size="sm" @click="vuestroDownloadAsJson(selectedSpoke, 'spoke.json')"><vuestro-icon name="download"></vuestro-icon></vuestro-button>
 				</template>
 				<div v-if="Object.keys(selectedSpoke).length == 0" class="no-data">Select a module to see its current state</div>
-        <vuestro-object-browser v-else ref="ob" :data="selectedSpoke" start-expanded></vuestro-object-browser>
+        <vuestro-object-browser v-else ref="ob" :data="selectedSpoke" start-expanded>
+          <template #post-value="{ k, v, parent}">
+            <vuestro-button v-if="parent === 'handledEvents' || parent === 'emittedEvents'" round no-border no-spacing size="sm" @click="$refs.sendEvent.openForEvent(v)">
+              <vuestro-icon name="share-square"></vuestro-icon>
+            </vuestro-button>
+          </template>
+        </vuestro-object-browser>
       </vuestro-panel>
     </vuestro-card>
+    <send-event ref="sendEvent"/>
   </vuestro-container>
 </template>
 
 <script>
 
 /* global Vuex, _ */
+import SendEvent from '@/components/SendEvent';
 
 export default {
   name: 'Topology',
+  components: {
+    SendEvent,
+  },
   data() {
     return {
       graphOptions: {

@@ -1,5 +1,5 @@
 <template>
-  <vuestro-modal :active="active" @close="onClose">
+  <vuestro-modal :active="active || isOpen" @close="onClose">
 		<template #title>Create Event</template>
 		<vuestro-container>
 			<vuestro-card>
@@ -8,7 +8,7 @@
 			<vuestro-card>
 			  <div class="editor-title">Event Content (JSON)</div>
 			  <div class="editor-wrapper">
-  				<vuestro-editor :lang="'json'" :value="sendEventContent" @input="onContentUpdate"></vuestro-editor>
+  				<vuestro-editor :lang="'json'" :value="sendEventContent" :options="editorOptions" @input="onContentUpdate"></vuestro-editor>
 				</div>
 			</vuestro-card>
 		</vuestro-container>
@@ -28,18 +28,28 @@
 export default {
   name: 'SendEvent',
   props: {
-    active: { type: Boolean, required: true },
+    active: { type: Boolean, default: false },
   },
   data() {
     return {
-      valid: false,
+      isOpen: false, // internal open flag
+      valid: true,
   		sendEventType: '',
-			sendEventContent: '',
-			sendEventObj: null,
+			sendEventContent: '{\n  \n}',
+			sendEventObj: {},
+      editorOptions: {
+        useSoftTabs: true,
+        tabSize: 2,
+      },
     };
   },
   methods: {
+    openForEvent(evt) {
+      this.isOpen = true;
+      this.sendEventType = evt;
+    },
     onClose() {
+      this.isOpen = false;
       this.$emit('update:active', false);
     },
     onContentUpdate(newVal) {
