@@ -1,5 +1,6 @@
 <template>
-  <vuestro-panel stretch>
+  <vuestro-panel stretch class="topology-widget">
+  	<template #title>Topology</template>
     <vuestro-force-graph :data="topologyNodelist" :options="options"></vuestro-force-graph>
   </vuestro-panel>
 </template>
@@ -24,3 +25,11 @@ export default {
 };
 
 </script>
+
+<style scoped>
+
+.topology-widget {
+	overflow: hidden;
+}
+
+</style>
