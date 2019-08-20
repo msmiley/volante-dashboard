@@ -31,5 +31,8 @@ export default {
 .topology-widget {
 	overflow: hidden;
 }
+.topology-widget >>> .vuestro-panel-contents {
+	overflow: hidden;
+}
 
 </style>

@@ -12,12 +12,14 @@
 
 import LastEvent from '@/components/LastEvent';
 import TopologyWidget from '@/components/TopologyWidget';
+import ClientList from '@/components/ClientList';
 
 export default {
 	name: 'Dashboard',
 	components: {
 	  LastEvent,
 	  TopologyWidget,
+	  ClientList,
 	},
   data() {
     return {
@@ -56,6 +58,7 @@ export default {
             title: 'Modules',
             color: 'var(--vuestro-primary)',
             icon: 'puzzle-piece',
+            clickRoute: 'topology',
           },
           position: {
             x: 0,
@@ -72,6 +75,7 @@ export default {
             title: 'Captured Events',
             color: 'var(--vuestro-green)',
             icon: 'exchange-alt',
+            clickRoute: 'events',
           },
           position: {
             x: 4,
@@ -88,6 +92,7 @@ export default {
             title: 'Captured Logs',
             color: 'var(--vuestro-indigo)',
             icon: 'th-list',
+            clickRoute: 'logs',
           },
           position: {
             x: 8,
@@ -115,6 +120,16 @@ export default {
             w: 6,
             h: 4,
           },
+        },
+        {
+          id: 'clients',
+          component: 'client-list',
+          position: {
+            x: 0,
+            y: 5,
+            w: 12,
+            h: 4,
+          }
         }
       ];
 	  },

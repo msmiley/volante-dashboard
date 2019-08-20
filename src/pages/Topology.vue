@@ -1,6 +1,6 @@
 <template>
   <vuestro-container no-wrap column shrink class="topology-container">
-    <vuestro-card cols="6" color="var(--vuestro-gold)">
+    <vuestro-card cols="6" color="var(--vuestro-gold)" overflow-hidden>
       <template #heading>
         Topology
 				<vuestro-button round no-border size="sm" @click="vuestroDownloadAsJson(topology, 'topology.json')">

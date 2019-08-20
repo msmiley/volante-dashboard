@@ -10,7 +10,7 @@
 				</span>
 			</template>
 			<vuestro-panel stretch>
-				<vuestro-table :data="stats" :columns="columns">
+				<vuestro-table :data="stats" :options="options">
 					<template #no-data>
 						No log messages
 					</template>
@@ -29,6 +29,9 @@
 						<td>
 							<div class="text-center">{{ item.memory | vuestroBytes }}</div>
 						</td>
+						<td>
+							<div class="text-center">{{ item.clients.length }}</div>
+						</td>
 					</template>
 				</vuestro-table>
 			</vuestro-panel>
@@ -44,28 +47,39 @@ export default {
 	name: 'Stats',
 	data() {
 		return {
-			columns: [
-				{
-					title: 'Timestamp',
-					field: 'ts',
-					sortable: true,
-				},
-				{
-					title: 'Event Count',
-					field: 'events',
-					sortable: true,
-				},
-				{
-					title: 'CPU Usage',
-					field: 'cpu',
-					sortable: true,
-				},
-				{
-					title: 'Memory Usage',
-					field: 'memory',
-					sortable: true,
-				},
-			]
+			options: {
+				columns: [
+					{
+						title: 'Timestamp',
+						field: 'ts',
+						sortable: true,
+					},
+					{
+						title: 'Event Count',
+						field: 'events',
+						align: 'center',
+						sortable: true,
+					},
+					{
+						title: 'CPU Usage',
+						field: 'cpu',
+						align: 'center',
+						sortable: true,
+					},
+					{
+						title: 'Memory Usage',
+						field: 'memory',
+						align: 'center',
+						sortable: true,
+					},
+					{
+						title: 'Num Clients',
+						field: 'clients',
+						align: 'center',
+						sortable: true,
+					},
+				],
+			},
 		};
 	},
 	computed: {

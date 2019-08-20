@@ -8,6 +8,7 @@ module.exports = {
 	name: 'VolanteDashboard',
   init() {
   	this.updateStats();
+  	// start timer to send stats to all clients
   	this.timer = setInterval(() => {
   		this.updateStats();
   		this.sendVolanteInfo(this.io);
@@ -32,6 +33,7 @@ module.exports = {
 		totalEvents: 0,
 		lastEvents: 0,
 		stats: [],
+		logCache: [],
 	},
 	events: {
 		// point VolanteExpress to the dist files for the static-built dashboard
@@ -62,7 +64,7 @@ module.exports = {
 		'VolanteExpress.listening'(obj) {
 			this.startSocketIO(obj.server);
 		},
-		// catch all volante events and forward to all browsers
+		// catch all volante events and forward to all clients
 		'*'(...args) {
 			this.lastEvents++;
 			this.totalEvents++;
@@ -103,11 +105,26 @@ module.exports = {
 			let elapSysMS = this.lastUsage.system / 1000;
 			let cpuPerc = Math.round(100 * (elapUserMS + elapSysMS) / elapTimeMS);
 
+			// gather connected client info
+			let clients = [];
+			if (this.io) {
+				for (let v of Object.values(this.io.sockets.sockets)) {
+					clients.push({
+						ip: v.handshake.address,
+						ua: v.handshake.headers['user-agent'],
+						since: v.handshake.time,
+						secure: v.handshake.secure,
+					});
+				}
+			}
+
+			// add to stats history
 			this.stats.push({
 				ts: new Date(),
 				events: this.lastEvents,
 				cpu: cpuPerc,
 				memory: process.memoryUsage().rss,
+				clients,
 			});
 			// slice stats to length=statsHistory
 			if (this.stats.length > this.statsHistory) {
