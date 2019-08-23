@@ -1,4 +1,6 @@
 const express = require('express');
+const connectHistoryApiFallback = require('connect-history-api-fallback');
+const socketIo = require('socket.io');
 
 //
 // Export a Volante module which leverages VolanteExpress to expose a
@@ -54,7 +56,7 @@ module.exports = {
 					}
 					next();
 				});
-				this.$emit('VolanteExpress.use', '/dashboard', require('connect-history-api-fallback')({
+				this.$emit('VolanteExpress.use', '/dashboard', connectHistoryApiFallback({
 					index: '//index.html',
 				}));
 				this.$emit('VolanteExpress.use', '/dashboard', express.static(__dirname + '/dist'));
@@ -76,7 +78,7 @@ module.exports = {
 	methods: {
 		startSocketIO(server) {
 			this.$debug('adding socket.io');
-			this.io = require('socket.io')(server);
+			this.io = socketIo(server);
 			this.io.on('connection', (client) => {
 				this.$debug('socket.io client connect');
 				client.emit('volante-dashboard.info', {
