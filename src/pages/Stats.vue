@@ -4,7 +4,7 @@
 			<template #heading>
 				<span>Stats</span>
 				<span class="log-toolbar">
-					<vuestro-button round no-border size="sm" @click="vuestroDownloadAsJson(stats, 'stats.json')">
+					<vuestro-button round no-border @click="vuestroDownloadAsJson(stats, 'stats.json')">
 						<vuestro-icon name="download"></vuestro-icon>
 					</vuestro-button>
 				</span>

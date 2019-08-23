@@ -4,9 +4,16 @@
 			<template #heading>
 				<span>Logs</span>
 				<span class="log-toolbar">
-					<vuestro-button pill no-border size="sm" @click="clearLogEvents">
+					<vuestro-button pill no-border v-model="showDebug" variant="info">Debug</vuestro-button>
+					<vuestro-button pill no-border v-model="showNormal" variant="success">Normal</vuestro-button>
+					<vuestro-button pill no-border v-model="showWarning" variant="warning">Warning</vuestro-button>
+					<vuestro-button pill no-border v-model="showError" variant="danger">Error</vuestro-button>
+					<vuestro-button pill no-border @click="clearLogEvents">
 						<vuestro-icon name="ban"></vuestro-icon>
 						<span>Clear</span>
+					</vuestro-button>
+					<vuestro-button round no-border @click="vuestroDownloadAsJson(logEvents, 'log.json')">
+						<vuestro-icon name="download"></vuestro-icon>
 					</vuestro-button>
 				</span>
 			</template>
@@ -52,6 +59,10 @@ export default {
 	name: 'Logs',
 	data() {
 		return {
+			showDebug: true,
+			showNormal: true,
+			showWarning: true,
+			showError: true,
 			columns: [
 				{
 					title: 'Timestamp',
@@ -78,7 +89,20 @@ export default {
 	computed: {
 		...Vuex.mapGetters(["logEvents"]),
 		filteredLogEvents() {
-			return _.flatMap(this.logEvents, 'eventObj');
+			let logs = _.flatMap(this.logEvents, 'eventObj');
+			if (!this.showDebug) {
+				logs = _.reject(logs, { lvl: 'debug' });
+			}
+			if (!this.showNormal) {
+				logs = _.reject(logs, { lvl: 'normal' });
+			}
+			if (!this.showWarning) {
+				logs = _.reject(logs, { lvl: 'warning' });
+			}
+			if (!this.showError) {
+				logs = _.reject(logs, { lvl: 'error' });
+			}
+			return logs;
 		}
 	},
 	methods: {
@@ -116,6 +140,7 @@ export default {
 
 .log-toolbar {
 	font-size: 13px;
+	display: flex;
 }
 
 </style>

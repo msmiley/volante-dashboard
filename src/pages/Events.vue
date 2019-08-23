@@ -4,13 +4,11 @@
 			<template #heading>
 				<span>Events</span>
 				<span class="events-toolbar">
-					<vuestro-button pill no-border size="sm" @click="createOpen = true">
+					<vuestro-button round no-border @click="createOpen = true">
 						<vuestro-icon name="plus"></vuestro-icon>
-						<span>Create</span>
 					</vuestro-button>
-					<vuestro-button pill no-border size="sm" @click="onClear">
+					<vuestro-button round no-border @click="onClear">
 						<vuestro-icon name="ban"></vuestro-icon>
-						<span>Clear</span>
 					</vuestro-button>
 				</span>
 			</template>
@@ -35,7 +33,7 @@
 				<template #toolbar>
 					<vuestro-button pill no-border @click="$refs.ob.expandAll()"><vuestro-icon name="plus"></vuestro-icon><span>Expand All</span></vuestro-button>
 					<vuestro-button pill no-border @click="$refs.ob.collapseAll()"><vuestro-icon name="minus"></vuestro-icon><span>Collapse All</span></vuestro-button>
-					<vuestro-button round no-border size="sm" @click="vuestroDownloadAsJson(currentObject, 'event.json')"><vuestro-icon name="download"></vuestro-icon></vuestro-button>
+					<vuestro-button round no-border @click="vuestroDownloadAsJson(currentObject, 'event.json')"><vuestro-icon name="download"></vuestro-icon></vuestro-button>
 				</template>
 				<div class="event-data">
 					<div v-if="Object.keys(currentObject).length === 0" class="no-data">Select an event to view the data object</div>
@@ -75,6 +73,7 @@ export default {
 			searchTerm: '',
 			currentObject: {},
 			currentIdx: -1,
+			showLogs: false,
 		};
 	},
 	methods: {
@@ -137,7 +136,6 @@ export default {
 }
 .events-toolbar {
 	display: flex;
-	font-size: 13px;
 }
 .event-data-panel {
 	overflow: hidden;

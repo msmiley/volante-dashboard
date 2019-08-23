@@ -28,10 +28,11 @@ export default {
       moduleCounter: [{ stat: 0 }],
       eventCounter: [{ stat: 0 }],
       logCounter: [{ stat: 0 }],
+      errorCounter: [{ stat: 0 }],
     };
   },
 	computed: {
-		...Vuex.mapGetters(['topology', 'events', 'logEvents']),
+		...Vuex.mapGetters(['topology', 'events', 'logEvents', 'errorLogs']),
 	},
 	watch: {
 	  topology(newVal) {
@@ -42,7 +43,10 @@ export default {
 	  },
 	  logEvents(newVal) {
 	    this.logCounter[0].stat = newVal.length;
-	  }
+	  },
+	  errorLogs(newVal) {
+	    this.errorCounter[0].stat = newVal.length;
+	  },
 	},
 	mounted() {
 	  this.loadDefaultLayout();
@@ -63,7 +67,7 @@ export default {
           position: {
             x: 0,
             y: 0,
-            w: 4,
+            w: 3,
             h: 1,
           }
         },
@@ -73,14 +77,14 @@ export default {
           data: this.eventCounter,
           options: {
             title: 'Captured Events',
-            color: 'var(--vuestro-green)',
+            color: 'var(--vuestro-indigo)',
             icon: 'exchange-alt',
             clickRoute: 'events',
           },
           position: {
-            x: 4,
+            x: 3,
             y: 0,
-            w: 4,
+            w: 3,
             h: 1,
           }
         },
@@ -90,14 +94,31 @@ export default {
           data: this.logCounter,
           options: {
             title: 'Captured Logs',
-            color: 'var(--vuestro-indigo)',
+            color: 'var(--vuestro-green)',
             icon: 'th-list',
             clickRoute: 'logs',
           },
           position: {
-            x: 8,
+            x: 6,
             y: 0,
-            w: 4,
+            w: 3,
+            h: 1,
+          }
+        },
+        {
+          id: 'errorCount',
+          component: 'vuestro-stat-panel',
+          data: this.errorCounter,
+          options: {
+            title: 'Error Logs',
+            color: 'var(--vuestro-danger)',
+            icon: 'exclamation-triangle',
+            clickRoute: 'logs',
+          },
+          position: {
+            x: 9,
+            y: 0,
+            w: 3,
             h: 1,
           }
         },

@@ -46,7 +46,12 @@ export default new Vuex.Store({
     },
     lastEvent(state) {
       return state.events[state.events.length-1];
-    }
+    },
+    errorLogs(state) {
+      return _.filter(state.logEvents, function(o) {
+        return o.eventObj[0].lvl === 'error';
+      });
+    },
   },
   actions: {
     setTitle({ commit }, title) {
