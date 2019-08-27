@@ -4,10 +4,10 @@
 			<template #heading>
 				<span>Logs</span>
 				<span class="log-toolbar">
-					<vuestro-button pill no-border v-model="showDebug" variant="info">Debug</vuestro-button>
-					<vuestro-button pill no-border v-model="showNormal" variant="success">Normal</vuestro-button>
-					<vuestro-button pill no-border v-model="showWarning" variant="warning">Warning</vuestro-button>
-					<vuestro-button pill no-border v-model="showError" variant="danger">Error</vuestro-button>
+					<vuestro-button rounded size="sm" no-border v-model="showDebug" variant="info">Debug</vuestro-button>
+					<vuestro-button rounded size="sm" no-border v-model="showNormal" variant="success">Normal</vuestro-button>
+					<vuestro-button rounded size="sm" no-border v-model="showWarning" variant="warning">Warning</vuestro-button>
+					<vuestro-button rounded size="sm" no-border v-model="showError" variant="danger">Error</vuestro-button>
 					<vuestro-button pill no-border @click="clearLogEvents">
 						<vuestro-icon name="ban"></vuestro-icon>
 						<span>Clear</span>
