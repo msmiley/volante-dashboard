@@ -74,6 +74,10 @@ module.exports = {
 				this.io.emit('*', ...args);
 			}
 		},
+		'VolanteDashboard.callbackTest'(str, obj, ary, callback) {
+			// let callback = args.pop();
+			callback && callback(null, arguments);
+		},
 	},
 	methods: {
 		startSocketIO(server) {
@@ -89,7 +93,14 @@ module.exports = {
 				// receive events from client side to re-emit on volante
 			  client.on('event', (data) => {
 			  	this.$debug('socket.io event from client', data);
-			  	this.$emit(data.eventType, data.eventObj);
+			  	if (data.eventCallback) {
+			  		// if eventCallback set, add a callback to the end the event args
+			  		// for the handler to call
+			  		data.eventArgs.push(function (err, result) {
+			  			client.emit('callback-result', [err, result]);
+			  		});
+			  	}
+			  	this.$emit(data.eventType, ...data.eventArgs);
 		  	});
 			  client.on('disconnect', () => {
 			  	this.$debug('socket.io client disconnect');

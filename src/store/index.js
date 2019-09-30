@@ -6,6 +6,7 @@ export default new Vuex.Store({
     title: 'volante',
     version: '0.0.0',
     events: [],
+    lastCallbackResult: null, // store result of callback for interactive eventing
     logEvents: [],
     stats: [],
     uptime: null,
@@ -49,8 +50,11 @@ export default new Vuex.Store({
     },
     errorLogs(state) {
       return _.filter(state.logEvents, function(o) {
-        return o.eventObj[0].lvl === 'error';
+        return o.eventArgs[0].lvl === 'error';
       });
+    },
+    lastCallbackResult(state) {
+      return state.lastCallbackResult;
     },
   },
   actions: {
@@ -60,8 +64,8 @@ export default new Vuex.Store({
     setVersion({ commit }, version) {
       commit('setVersion', version);
     },
-    addEvent({ commit }, eventArgs) {
-      commit('addEvent', eventArgs);
+    addEvent({ commit }, args) {
+      commit('addEvent', args);
     },
     clearEvents({ commit }) {
       commit('clearEvents');
@@ -78,6 +82,9 @@ export default new Vuex.Store({
     setTopology({ commit }, topology) {
       commit('setTopology', topology);
     },
+    setLastCallbackResult({ commit }, result) {
+      commit('setLastCallbackResult', result);
+    },
   },
   mutations: {
     setTitle(state, title) {
@@ -86,20 +93,20 @@ export default new Vuex.Store({
     setVersion(state, version) {
       state.version = version;
     },
-    addEvent(state, eventArgs) {
-      let eventType = eventArgs[0];
-      let eventObj = eventArgs.slice(1);
+    addEvent(state, args) {
+      let eventType = args[0]; // type is first arg, rest are the "args"
+      let eventArgs = args.slice(1);
       if (eventType === 'volante.log' || eventType === 'error') {
         state.logEvents.push({
           ts: new Date(),
           eventType,
-          eventObj,
+          eventArgs,
         });
       } else {
         state.events.push({
           ts: new Date(),
           eventType,
-          eventObj,
+          eventArgs,
         });
       }
     },
@@ -133,6 +140,9 @@ export default new Vuex.Store({
           target: cnt++,
         });
       }
+    },
+    setLastCallbackResult(state, result) {
+      state.lastCallbackResult = result;
     },
   },
 });

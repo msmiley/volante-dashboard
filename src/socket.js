@@ -26,5 +26,9 @@ export default {
       store.dispatch('setUptime', d.uptime);
       store.dispatch('setStats', d.stats);
     });
+
+    Vue.socket.on('callback-result', (d) => {
+      store.dispatch('setLastCallbackResult', d);
+    });
   }
 };
