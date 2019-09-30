@@ -75,7 +75,6 @@ module.exports = {
 			}
 		},
 		'VolanteDashboard.callbackTest'(str, obj, ary, callback) {
-			// let callback = args.pop();
 			callback && callback(null, arguments);
 		},
 	},

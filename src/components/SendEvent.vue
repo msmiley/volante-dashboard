@@ -30,8 +30,14 @@
 			  </vuestro-container>
 			  <vuestro-panel v-if="provideCallback">
 			    <template #title>Last Callback Result</template>
-			    <template v-if="lastCallbackResult && lastCallbackResult.length == 2">
-    			  <vuestro-object-browser :data="lastCallbackResult[1]"></vuestro-object-browser>
+			    <template v-if="lastCallbackResult && lastCallbackResult.length === 2">
+      			<template v-if="lastCallbackResult[0]">
+      			  <span class="callback-error">ERROR</span>
+      			  <vuestro-object-browser :data="lastCallbackResult[0]"></vuestro-object-browser>
+      			</template>
+			      <template v-else>
+      			  <vuestro-object-browser :data="lastCallbackResult[1]"></vuestro-object-browser>
+    			  </template>
   			  </template>
 			    <div v-else class="waiting-for-callback">Waiting for callback result...</div>
 			  </vuestro-panel>
@@ -102,7 +108,7 @@ export default {
       this.valid = true;
       this.provideCallback = false;
       this.argBuffers = [];
-      this.$store.dispatch('setLastCallbackResult', {});
+      this.$store.dispatch('setLastCallbackResult', null);
     },
     onContentUpdate(idx, newVal) {
       // update text
@@ -181,6 +187,12 @@ export default {
 .waiting-for-callback {
   padding-bottom: 5px;
   padding-left: 10px;
+}
+
+.callback-error {
+  color: var(--vuestro-danger);
+  margin-left: 20px;
+  font-weight: 600;
 }
 
 </style>
