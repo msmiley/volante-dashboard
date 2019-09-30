@@ -37,7 +37,7 @@
 				</template>
 				<div class="event-data">
 					<div v-if="Object.keys(currentObject).length === 0" class="no-data">Select an event to view the data object</div>
-					<vuestro-object-browser ref="ob" expand-all :data="currentObject"></vuestro-object-browser>
+					<vuestro-object-browser v-else ref="ob" expand-all :data="currentObject"></vuestro-object-browser>
 				</div>
 			</vuestro-panel>
 		</vuestro-card>
