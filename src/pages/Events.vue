@@ -21,7 +21,12 @@
 				<div class="events-list">
 					<div v-if="filteredEvents.length == 0" class="no-data">No events, yet...</div>
 					<div v-for="(e, idx) in filteredEvents" class="event" @click="onSelectEvent(idx, e)" :class="{ selected: idx == currentIdx }">
-						<div class="type">{{ e.eventType }}</div>
+						<div class="type">
+							<vuestro-button round no-border @click="reEmit(e)">
+								<vuestro-icon name="share-square"></vuestro-icon>
+							</vuestro-button>
+							{{ e.eventType }}
+						</div>
 						<div>{{ e.ts | vuestroHMS }}</div>
 					</div>
 				</div>
@@ -47,7 +52,7 @@
 
 <script>
 
-/* global _, Vuex */
+/* global _, Vuex, Vue */
 import SendEvent from '@/components/SendEvent';
 
 export default {
@@ -92,6 +97,9 @@ export default {
 				this.currentObject = {};
 			}
 		},
+		reEmit(e) {
+			Vue.socket.emit('event', e);
+		},
 	}
 };
 
@@ -119,6 +127,7 @@ export default {
 .event > .type {
 	font-weight: 600;
 	color: var(--vuestro-indigo);
+	display: flex;
 }
 .events-sidebar {
 	display: flex;
