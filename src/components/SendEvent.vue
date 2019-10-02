@@ -11,16 +11,18 @@
   			      <vuestro-icon name="plus"></vuestro-icon>
   			    </vuestro-button>
   			  </template>
-          <div v-for="(arg, idx) in argBuffers" class="event-arg-block">
+          <div v-for="(arg, idx) in args" class="event-arg-block">
             <div class="event-arg-sidebar">
               <span>{{ idx }}</span>
               <vuestro-button round no-border variant="danger" size="lg" @click="onDeleteArg(idx)">
                 <vuestro-icon name="trash"></vuestro-icon>
               </vuestro-button>
             </div>
-    			  <div class="editor-wrapper">
-      				<vuestro-editor :lang="'json'" :value="arg" :options="editorOptions" @input="onContentUpdate(idx, ...arguments)"></vuestro-editor>
+    			  <div class="editor-wrapper" :style="{ height: arg.height }">
+      				<vuestro-editor :lang="'json'" :value="arg.buffer" :options="editorOptions" @input="onContentUpdate(idx, ...arguments)"></vuestro-editor>
     				</div>
+    				<div class="event-arg-block-resize-handle"
+    				     @mousedown="onArgResizeStart(idx, ...arguments)"></div>
           </div>
   			</vuestro-panel>
 			</vuestro-card>
@@ -67,12 +69,13 @@ export default {
       valid: true,
   		sendEventType: '',
 			sendEventArgs: [],
-			argBuffers: [],
+			args: [],
       editorOptions: {
         useSoftTabs: true,
         tabSize: 2,
       },
       provideCallback: false,
+      resizingIdx: null,
     };
   },
   computed: {
@@ -80,7 +83,7 @@ export default {
   },
   methods: {
     openForEvent(evt) {
-      this.argBuffers = [];
+      this.args = [];
       this.provideCallback = false;
       // see if there are arguments
       let sig = evt.match(/\((.*)\)/);
@@ -94,7 +97,9 @@ export default {
 
           for (let a of args) {
             // add argument var name as starting buffer value
-            this.argBuffers.push(`"${a}"`);
+            this.args.push({
+              buffer: `"${a}"`
+            });
           }
         }
       }
@@ -107,20 +112,20 @@ export default {
       this.$emit('update:active', false);
       this.valid = true;
       this.provideCallback = false;
-      this.argBuffers = [];
+      this.args = [];
       this.$store.dispatch('setLastCallbackResult', null);
     },
     onContentUpdate(idx, newVal) {
       // update text
-      this.argBuffers[idx] = newVal;
+      this.args[idx].buffer = newVal;
       this.validateBuffers();
     },
     validateBuffers() {
       // try to validate as JSON
       try {
         this.sendEventArgs = [];
-        for (let a of this.argBuffers) {
-          this.sendEventArgs.push(JSON.parse(a));
+        for (let a of this.args) {
+          this.sendEventArgs.push(JSON.parse(a.buffer));
         }
         this.valid = true;
       } catch(e) {
@@ -141,10 +146,39 @@ export default {
       }
     },
     onAddArg() {
-      this.argBuffers.push('');
+      this.args.push({
+        buffer: '',
+        height: '80px',
+      });
     },
     onDeleteArg(idx) {
-      this.argBuffers.splice(idx, 1);
+      this.args.splice(idx, 1);
+    },
+    onArgResizeStart(idx, evt) {
+      this.resizingIdx = idx;
+      evt.preventDefault();
+      evt.stopPropagation();
+      window.dragging = true;
+
+      let mouseY = evt.clientY;
+      let originalHeight = parseInt(this.args[this.resizingIdx].height, 10);
+
+      const handleMouseUp = evt => {
+        window.removeEventListener('mouseup', handleMouseUp, true);
+        window.removeEventListener('mousemove', handleMouseMove, true);
+        window.dispatchEvent(new Event('resize'));
+      };
+
+      const handleMouseMove = evt => {
+        let newHeight = originalHeight + evt.clientY - mouseY;
+        if (newHeight > 80) {
+          this.args[this.resizingIdx].height = `${newHeight}px`;
+          window.dispatchEvent(new Event('resize'));
+        }
+      };
+
+      window.addEventListener('mouseup', handleMouseUp, true);
+      window.addEventListener('mousemove', handleMouseMove, true);
     },
   }
 };
@@ -156,8 +190,13 @@ export default {
 .event-arg-block {
   display: flex;
   align-items: stretch;
+  position: relative;
+}
+
+.event-arg-block:first-child {
   border-top: 1px solid var(--vuestro-outline);
 }
+
 
 .event-arg-sidebar {
   font-size: 22px;
@@ -173,9 +212,9 @@ export default {
 
 .editor-wrapper {
   flex-grow: 1;
-  height: 80px;
   position: relative;
   z-index: 1;
+  padding-bottom: 2px;
 }
 
 .editor-title {
@@ -193,6 +232,16 @@ export default {
   color: var(--vuestro-danger);
   margin-left: 20px;
   font-weight: 600;
+}
+
+.event-arg-block-resize-handle {
+  height: 2px;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  cursor: row-resize;
+  background-color: rgba(0,0,0,0.2);
+  z-index: 100;
 }
 
 </style>
