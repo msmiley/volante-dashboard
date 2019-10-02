@@ -74,8 +74,11 @@ module.exports = {
 				this.io.emit('*', ...args);
 			}
 		},
-		'VolanteDashboard.callbackTest'(str, obj, ary, callback) {
-			callback && callback(null, arguments);
+		'hello.world'(...args) {
+			if (typeof args[args.length -1] === 'function') {
+				let callback = args.pop();
+				callback(null, args);
+			}
 		},
 	},
 	methods: {
@@ -202,29 +205,4 @@ if (require.main === module) {
 		console.log(`listening on http://${o.bind}:${o.port}`);
 	});
 	hub.emit('VolanteExpress.start');
-
-	// set up some timers for fake events
-	let cnt = 0;
-	setInterval(() => {
-		hub.emit(`testevent-${cnt}`, {
-			count: cnt++,
-			count1: cnt++,
-			count2: cnt++,
-			count3: cnt++,
-			count4: cnt++,
-			count5: cnt++,
-			count6: cnt++,
-			count7: cnt++,
-			count8: cnt++,
-			count9: cnt++,
-			count10: cnt++,
-			count11: cnt++,
-			count12: cnt++,
-			count13: cnt++,
-			count14: cnt++,
-			count15: cnt++,
-			count16: cnt++,
-		});
-	}, 5000);
-
 }

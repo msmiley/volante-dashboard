@@ -56,6 +56,13 @@ export default new Vuex.Store({
     lastCallbackResult(state) {
       return state.lastCallbackResult;
     },
+    allHandledEvents(state) {
+      let ret = [];
+      for (let m of state.topology) {
+        ret = ret.concat(m.handledEvents);
+      }
+      return _.uniq(ret);
+    },
   },
   actions: {
     setTitle({ commit }, title) {
@@ -142,7 +149,10 @@ export default new Vuex.Store({
       }
     },
     setLastCallbackResult(state, result) {
-      state.lastCallbackResult = result;
+      state.lastCallbackResult = {
+        ts: new Date(),
+        result,
+      };
     },
   },
 });

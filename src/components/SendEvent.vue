@@ -1,10 +1,10 @@
 <template>
-  <vuestro-modal :active="active || isOpen" @close="onClose">
+  <vuestro-modal :active="active || isOpen" @close="onClose" close-on-blur>
 		<template #title>Create Event</template>
 		<vuestro-container>
 			<vuestro-card>
-				<vuestro-text-field v-model="sendEventType" placeholder="Event Type" hint="e.g. hello.world"></vuestro-text-field>
-  			<vuestro-panel gutter="none">
+				<vuestro-text-field v-model="sendEventType" placeholder="Event Type" hint="e.g. hello.world" :presets="allHandledEvents"></vuestro-text-field>
+  			<vuestro-panel gutter="none" scroll collapsible>
   			  <template #title>Event Arguments (as JSON)</template>
   			  <template #toolbar>
   			    <vuestro-button round no-border @click="onAddArg">
@@ -30,15 +30,21 @@
 			  <vuestro-container gutter="none">
   			  <vuestro-button checkbox v-model="provideCallback" size="lg">Append callback function argument</vuestro-button>
 			  </vuestro-container>
-			  <vuestro-panel v-if="provideCallback">
+			  <vuestro-panel v-if="provideCallback" collapsible>
 			    <template #title>Last Callback Result</template>
-			    <template v-if="lastCallbackResult && lastCallbackResult.length === 2">
-      			<template v-if="lastCallbackResult[0]">
+			    <template #toolbar>
+			      <span v-if="lastCallbackResult && lastCallbackResult.ts">{{ lastCallbackResult.ts | vuestroHMS }}</span>
+			      <vuestro-button round no-border @click="$store.dispatch('setLastCallbackResult', null)">
+			        <vuestro-icon name="ban"></vuestro-icon>
+			      </vuestro-button>
+			    </template>
+			    <template v-if="lastCallbackResult && lastCallbackResult.result && lastCallbackResult.result.length === 2">
+      			<template v-if="lastCallbackResult.result[0]">
       			  <span class="callback-error">ERROR</span>
-      			  <vuestro-object-browser :data="lastCallbackResult[0]"></vuestro-object-browser>
+      			  <vuestro-object-browser :data="lastCallbackResult.result[0]"></vuestro-object-browser>
       			</template>
 			      <template v-else>
-      			  <vuestro-object-browser :data="lastCallbackResult[1]"></vuestro-object-browser>
+      			  <vuestro-object-browser :data="lastCallbackResult.result[1]"></vuestro-object-browser>
     			  </template>
   			  </template>
 			    <div v-else class="waiting-for-callback">Waiting for callback result...</div>
@@ -79,7 +85,7 @@ export default {
     };
   },
   computed: {
-		...Vuex.mapGetters(['lastCallbackResult']),
+		...Vuex.mapGetters(['lastCallbackResult', 'allHandledEvents']),
   },
   methods: {
     openForEvent(evt) {
@@ -110,10 +116,6 @@ export default {
       // reset and close
       this.isOpen = false;
       this.$emit('update:active', false);
-      this.valid = true;
-      this.provideCallback = false;
-      this.args = [];
-      this.$store.dispatch('setLastCallbackResult', null);
     },
     onContentUpdate(idx, newVal) {
       // update text
@@ -143,11 +145,13 @@ export default {
       if (!this.provideCallback) {
         // close if not waiting on callback result
         this.onClose();
+      } else {
+        this.$store.dispatch('setLastCallbackResult', null);
       }
     },
     onAddArg() {
       this.args.push({
-        buffer: '',
+        buffer: 'null',
         height: '80px',
       });
     },
