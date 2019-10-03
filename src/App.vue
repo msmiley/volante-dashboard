@@ -1,8 +1,14 @@
 <template>
-  <vuestro-app :title="title">
+  <vuestro-app :title="title" :loading="!isSavedLoaded">
 
     <template #navbar-slot>
       <navbar-stats></navbar-stats>
+    </template>
+
+    <template #sidebar>
+      <vuestro-sidebar :mini="isMiniSidebar"
+                       @update:mini="$store.dispatch('toggleSidebar')">
+      </vuestro-sidebar>
     </template>
 
     <template #footer>
@@ -30,7 +36,10 @@ export default {
     };
   },
   computed: {
-    ...Vuex.mapGetters(['title', 'version']),
+    ...Vuex.mapGetters(['title', 'version', 'isMiniSidebar', 'isSavedLoaded']),
+  },
+  mounted() {
+    this.$store.dispatch('loadSavedSettings');
   },
 };
 </script>

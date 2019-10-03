@@ -1,6 +1,24 @@
 <template>
   <vuestro-modal :active="active || isOpen" @close="onClose" close-on-blur>
 		<template #title>Create Event</template>
+		<template #toolbar>
+		  <vuestro-dropdown right click-to-open>
+		    <template #button>
+    		  <vuestro-button pill variant="info">
+    		    <vuestro-icon name="save"></vuestro-icon>
+    		    <span>Save Event</span>
+    		  </vuestro-button>
+  		  </template>
+		  </vuestro-dropdown>
+		  <vuestro-dropdown right click-to-open>
+		    <template #button>
+    		  <vuestro-button pill variant="success">
+    		    <vuestro-icon name="save"></vuestro-icon>
+    		    <span>Load Event</span>
+    		  </vuestro-button>
+  		  </template>
+		  </vuestro-dropdown>
+		</template>
 		<vuestro-container>
 			<vuestro-card>
 				<vuestro-text-field v-model="sendEventType" placeholder="Event Type" hint="e.g. hello.world" :presets="allHandledEvents"></vuestro-text-field>
@@ -36,6 +54,9 @@
 			      <span v-if="lastCallbackResult && lastCallbackResult.ts">{{ lastCallbackResult.ts | vuestroHMS }}</span>
 			      <vuestro-button round no-border @click="$store.dispatch('setLastCallbackResult', null)">
 			        <vuestro-icon name="ban"></vuestro-icon>
+			      </vuestro-button>
+			      <vuestro-button round no-border @click="vuestroDownloadAsJson(lastCallbackResult.result, 'result.json')">
+			        <vuestro-icon name="download"></vuestro-icon>
 			      </vuestro-button>
 			    </template>
 			    <template v-if="lastCallbackResult && lastCallbackResult.result && lastCallbackResult.result.length === 2">

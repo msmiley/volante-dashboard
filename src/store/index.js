@@ -1,5 +1,7 @@
-/* global _, Vue, Vuex */
+/* global _, Vue, Vuex, localStorage */
 Vue.use(Vuex);
+
+const localStorageId = 'volante-dashboard';
 
 export default new Vuex.Store({
   state: {
@@ -18,6 +20,11 @@ export default new Vuex.Store({
         }
       ],
       links: [],
+    },
+    savedLoaded: false,
+    savedEvents: [],
+    savedSettings: {
+      isMiniSidebar: false,
     },
   },
   getters: {
@@ -63,8 +70,18 @@ export default new Vuex.Store({
       }
       return _.uniq(ret);
     },
+    isMiniSidebar(state) {
+      return state.savedSettings.isMiniSidebar;
+    },
+    isSavedLoaded(state) {
+      return state.savedLoaded;
+    },
   },
   actions: {
+    loadSavedSettings({ commit }) {
+      let obj = JSON.parse(localStorage.getItem(localStorageId));
+      commit('loadSavedSettings', obj);
+    },
     setTitle({ commit }, title) {
       commit('setTitle', title);
     },
@@ -92,8 +109,22 @@ export default new Vuex.Store({
     setLastCallbackResult({ commit }, result) {
       commit('setLastCallbackResult', result);
     },
+    toggleSidebar({ commit }) {
+      commit('toggleSidebar');
+    },
   },
   mutations: {
+    loadSavedSettings(state, obj) {
+      _.merge(state.savedSettings, obj.savedSettings);
+      _.merge(state.savedEvents, obj.savedEvents);
+      state.savedLoaded = true;
+    },
+    saveToLocalStorage(state) {
+      localStorage.setItem(localStorageId, JSON.stringify({
+        savedSettings: state.savedSettings,
+        savedEvents: state.savedEvents,
+      }));
+    },
     setTitle(state, title) {
       state.title = title;
     },
@@ -153,6 +184,10 @@ export default new Vuex.Store({
         ts: new Date(),
         result,
       };
+    },
+    toggleSidebar(state) {
+      state.savedSettings.isMiniSidebar = !state.savedSettings.isMiniSidebar;
+      this.commit('saveToLocalStorage');
     },
   },
 });

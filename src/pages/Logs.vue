@@ -89,7 +89,7 @@ export default {
 	computed: {
 		...Vuex.mapGetters(["logEvents"]),
 		filteredLogEvents() {
-			let logs = _.flatMap(this.logEvents, 'eventObj');
+			let logs = _.flatMap(this.logEvents, 'eventArgs');
 			if (!this.showDebug) {
 				logs = _.reject(logs, { lvl: 'debug' });
 			}
