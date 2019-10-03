@@ -115,10 +115,10 @@ export default new Vuex.Store({
   },
   mutations: {
     loadSavedSettings(state, obj) {
-      if (obj.savedSettings) {
+      if (obj && obj.savedSettings) {
         _.merge(state.savedSettings, obj.savedSettings);
       }
-      if (obj.savedEvents) {
+      if (obj && obj.savedEvents) {
         _.merge(state.savedEvents, obj.savedEvents);
       }
       state.savedLoaded = true;
