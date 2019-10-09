@@ -4,9 +4,12 @@
 			<template #heading>
 				<span>Stats</span>
 				<span class="log-toolbar">
-					<vuestro-button round no-border @click="vuestroDownloadAsJson(stats, 'stats.json')">
-						<vuestro-icon name="download"></vuestro-icon>
-					</vuestro-button>
+					<vuestro-tooltip position="bottom" no-wrap rounded>
+	          <template #content>Download stats log as JSON</template>
+						<vuestro-button round no-border @click="vuestroDownloadAsJson(stats, 'stats.json')">
+							<vuestro-icon name="download"></vuestro-icon>
+						</vuestro-button>
+					</vuestro-tooltip>
 				</span>
 			</template>
 			<vuestro-panel stretch>
@@ -53,6 +56,7 @@ export default {
 						title: 'Timestamp',
 						field: 'ts',
 						sortable: true,
+						sort: 'desc',
 					},
 					{
 						title: 'Event Count',

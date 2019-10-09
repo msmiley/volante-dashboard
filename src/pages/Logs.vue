@@ -12,13 +12,16 @@
 						<vuestro-icon name="ban"></vuestro-icon>
 						<span>Clear</span>
 					</vuestro-button>
-					<vuestro-button round no-border @click="vuestroDownloadAsJson(logEvents, 'log.json')">
-						<vuestro-icon name="download"></vuestro-icon>
-					</vuestro-button>
+					<vuestro-tooltip position="bottom" no-wrap rounded>
+	          <template #content>Download entire log as JSON</template>
+						<vuestro-button round no-border @click="vuestroDownloadAsJson(logEvents, 'log.json')">
+							<vuestro-icon name="download"></vuestro-icon>
+						</vuestro-button>
+					</vuestro-tooltip>
 				</span>
 			</template>
 			<vuestro-panel stretch>
-				<vuestro-table :data="filteredLogEvents" :columns="columns">
+				<vuestro-table :data="filteredLogEvents" :options="tableOptions">
 					<template #no-data>
 						No log messages
 					</template>
@@ -39,15 +42,44 @@
 							</span>
 						</td>
 						<td>
-							<span v-for="o in item.msg" class="align-left">
+							<span v-for="o in item.msg" class="message-column align-left">
 								<vuestro-pill v-if="typeof(o) == 'string'" :title="o"></vuestro-pill>
-								<vuestro-object-browser v-else :data="o"></vuestro-object-browser>
+								<vuestro-container space-between v-else gutter="none">
+									<vuestro-object-browser :data="o"></vuestro-object-browser>
+								</vuestro-container>
 							</span>
+						</td>
+						<td>
+							<div class="message-column-object-toolbar">
+								<vuestro-tooltip position="left" no-wrap rounded>
+				          <template #content>Download Message as JSON</template>
+									<vuestro-button round no-border @click="vuestroDownloadAsJson(item, 'log.json')">
+										<vuestro-icon name="download"></vuestro-icon>
+									</vuestro-button>
+								</vuestro-tooltip>
+								<vuestro-tooltip position="left" no-wrap rounded>
+				          <template #content>View Raw Message</template>
+									<vuestro-button round no-border @click="onShowRaw(item)">
+										<vuestro-icon name="stream"></vuestro-icon>
+									</vuestro-button>
+								</vuestro-tooltip>
+							</div>
 						</td>
 					</template>
 				</vuestro-table>
 			</vuestro-panel>
 		</vuestro-card>
+		<vuestro-modal :active.sync="showRaw" close-on-blur>
+			<template #title>
+				Raw Message
+			</template>
+			<template #toolbar>
+				<vuestro-button round no-border @click="vuestroDownloadAsJson(selectedItem, 'log.json')">
+					<vuestro-icon name="download"></vuestro-icon>
+				</vuestro-button>
+			</template>
+			<vuestro-editor lang="json" :value="JSON.stringify(selectedItem, null, 2)" :options="{ maxLines: Infinity }"></vuestro-editor>
+		</vuestro-modal>
 	</vuestro-container>
 </template>
 
@@ -63,27 +95,35 @@ export default {
 			showNormal: true,
 			showWarning: true,
 			showError: true,
-			columns: [
-				{
-					title: 'Timestamp',
-					field: 'ts',
-					sortable: true,
-				},
-				{
-					title: 'Level',
-					field: 'lvl',
-					sortable: true,
-				},
-				{
-					title: 'Source',
-					field: 'src',
-					sortable: true,
-				},
-				{
-					title: 'Message',
-					field: 'msg'
-				},
-			]
+			showRaw: false,
+			selectedItem: null,
+			tableOptions: {
+				columns: [
+					{
+						title: 'Timestamp',
+						field: 'ts',
+						sortable: true,
+						sort: 'desc',
+					},
+					{
+						title: 'Level',
+						field: 'lvl',
+						sortable: true,
+					},
+					{
+						title: 'Source',
+						field: 'src',
+						sortable: true,
+					},
+					{
+						title: 'Message',
+						field: 'msg'
+					},
+					{
+						padding: 0
+					}
+				]
+			},
 		};
 	},
 	computed: {
@@ -118,7 +158,11 @@ export default {
 				default:
 					return 'var(--vuestro-info)';
 			}
-		}
+		},
+		onShowRaw(d) {
+			this.selectedItem = d;
+			this.showRaw = true;
+		},
 	}
 };
 
@@ -141,6 +185,16 @@ export default {
 .log-toolbar {
 	font-size: 13px;
 	display: flex;
+}
+
+.message-column {
+	margin-right: 2px;
+}
+
+.message-column-object-toolbar {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
 }
 
 </style>

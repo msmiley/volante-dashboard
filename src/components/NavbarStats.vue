@@ -78,22 +78,22 @@ export default {
 .cpu-chart:before {
   content: "CPU";
   position: absolute;
-  top: 0;
-  left: 2px;
+  top: 2px;
+  left: 5px;
 }
 
 .mem-chart:before {
   content: "Memory";
   position: absolute;
-  top: 0;
-  left: 2px;
+  top: 2px;
+  left: 5px;
 }
 
 .evt-chart:before {
   content: "Events";
   position: absolute;
-  top: 0;
-  left: 2px;
+  top: 2px;
+  left: 5px;
 }
 
 </style>

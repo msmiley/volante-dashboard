@@ -18,7 +18,13 @@
 					<vuestro-button round no-border @click="vuestroDownloadAsJson(selectedSpoke, 'spoke.json')"><vuestro-icon name="download"></vuestro-icon></vuestro-button>
 				</template>
 				<div v-if="Object.keys(selectedSpoke).length == 0" class="no-data">Select a module to see its current state</div>
-        <vuestro-object-browser v-else ref="ob" :data="selectedSpoke" start-expanded>
+        <vuestro-object-browser v-else
+                                ref="ob"
+                                :data="selectedSpoke"
+                                :options="{ editable: editableCheck }"
+                                @edit="editing = true"
+                                @done="editing = false"
+                                @change="onDataChange">
           <template #post-value="{ k, v, parent}">
             <vuestro-button v-if="parent === 'handledEvents' || parent === 'emittedEvents'" round no-border @click="$refs.sendEvent.openForEvent(v)">
               <vuestro-icon name="share-square"></vuestro-icon>
@@ -33,7 +39,7 @@
 
 <script>
 
-/* global Vuex, _ */
+/* global Vue, Vuex, _ */
 import SendEvent from '@/components/SendEvent';
 
 export default {
@@ -48,6 +54,7 @@ export default {
         distance: 100,
       },
       selectedSpoke: {},
+      editing: false,
     };
   },
   computed: {
@@ -55,7 +62,9 @@ export default {
   },
   watch: {
     topologyNodelist() {
-      this.updateSelectedSpoke();
+      if (!this.editing) {
+        this.updateSelectedSpoke();
+      }
     },
   },
   methods: {
@@ -67,7 +76,17 @@ export default {
         this.selectedSpoke = _.find(this.topology, { name: this.selectedSpoke.name });
       }
     },
-  }
+    onDataChange(k, v) {
+      Vue.socket.emit('spoke.update', {
+        name: this.selectedSpoke.name,
+        key: k,
+        val: v,
+      });
+    },
+    editableCheck(k, v) {
+      return (k.startsWith('data.') || k.startsWith('props.'));
+    },
+  },
 };
 
 </script>

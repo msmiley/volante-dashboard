@@ -1,5 +1,5 @@
 <template>
-  <vuestro-panel stretch class="topology-widget">
+  <vuestro-panel frame class="topology-widget">
   	<template #title>Topology</template>
     <vuestro-force-graph :data="topologyNodelist" :options="options"></vuestro-force-graph>
   </vuestro-panel>

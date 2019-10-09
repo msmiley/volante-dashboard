@@ -22,7 +22,7 @@
 		<vuestro-container>
 			<vuestro-card>
 				<vuestro-text-field v-model="sendEventType" placeholder="Event Type" hint="e.g. hello.world" :presets="allHandledEvents"></vuestro-text-field>
-  			<vuestro-panel gutter="none" scroll collapsible>
+  			<vuestro-panel gutter="none" collapsible>
   			  <template #title>Event Arguments (as JSON)</template>
   			  <template #toolbar>
   			    <vuestro-button round no-border @click="onAddArg">
@@ -37,7 +37,7 @@
               </vuestro-button>
             </div>
     			  <div class="editor-wrapper" :style="{ height: arg.height }">
-      				<vuestro-editor :lang="'json'" :value="arg.buffer" :options="editorOptions" @input="onContentUpdate(idx, ...arguments)"></vuestro-editor>
+      				<vuestro-editor lang="json" :value="arg.buffer" :options="editorOptions" @input="onContentUpdate(idx, ...arguments)"></vuestro-editor>
     				</div>
     				<div class="event-arg-block-resize-handle"
     				     @mousedown="onArgResizeStart(idx, ...arguments)"></div>

@@ -104,6 +104,23 @@ module.exports = {
 			  	}
 			  	this.$emit(data.eventType, ...data.eventArgs);
 		  	});
+		  	// process events to edit volante spoke state
+		  	client.on('spoke.update', (spokeData) => {
+					this.$debug('updating spoke module', spokeData);
+					let spoke = this.$hub.getInstanceByName(spokeData.name);
+					if (spoke) {
+				    let path = spokeData.key.split('.');
+				    let prefix = path.shift();
+						// new val should be either in props. or data.
+						if (prefix === 'data' || prefix === 'props') {
+					    var i;
+					    for (i = 0; i < path.length - 1; i++) {
+				        spoke = spoke[path[i]];
+					    }
+					    spoke[path[i]] = spokeData.val;
+						}
+					}
+		  	});
 			  client.on('disconnect', () => {
 			  	this.$debug('socket.io client disconnect');
 			  });
@@ -174,11 +191,14 @@ if (require.main === module) {
 		name: 'TestSpoke',
 		init() {
 			setInterval(() => {
-				this.counter++;
-			}, 1000);
+				this.counter += this.increment;
+			}, 5000);
 		},
 		props: {
 			counter: 0,
+		},
+		data: {
+			increment: 1,
 		},
 	});
 
