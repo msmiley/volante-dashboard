@@ -12,6 +12,7 @@ import Events from '../pages/Events';
 import Topology from '../pages/Topology';
 import Logs from '../pages/Logs';
 import Stats from '../pages/Stats';
+import Settings from '../pages/Settings';
 
 export default new Router({
   base: '/dashboard',
@@ -67,7 +68,17 @@ export default new Router({
       path: '/logs',
       component: Logs,
     },
-
+    {
+      meta: {
+        title: 'Settings',
+        icon: 'cogs',
+        sidebarBottom: true,
+        bgColor: 'var(--vuestro-gray)',
+      },
+      name: 'settings',
+      path: '/settings',
+      component: Settings,
+    },
     { path: '/*', redirect: '/dashboard' } // redirect to dashboard
   ],
 });

@@ -22,7 +22,7 @@ export default new Vuex.Store({
       links: [],
     },
     savedLoaded: false,
-    savedEvents: [],
+    savedEvents: {},
     savedSettings: {
       isMiniSidebar: false,
     },
@@ -76,6 +76,9 @@ export default new Vuex.Store({
     isSavedLoaded(state) {
       return state.savedLoaded;
     },
+    savedEvents(state) {
+      return state.savedEvents;
+    },
   },
   actions: {
     loadSavedSettings({ commit }) {
@@ -111,6 +114,12 @@ export default new Vuex.Store({
     },
     toggleSidebar({ commit }) {
       commit('toggleSidebar');
+    },
+    saveEvent({ commit }, obj) {
+      commit('saveEvent', obj);
+    },
+    deleteSavedEvent({ commit }, key) {
+      commit('deleteSavedEvent', key);
     },
   },
   mutations: {
@@ -191,6 +200,14 @@ export default new Vuex.Store({
     },
     toggleSidebar(state) {
       state.savedSettings.isMiniSidebar = !state.savedSettings.isMiniSidebar;
+      this.commit('saveToLocalStorage');
+    },
+    saveEvent(state, obj) {
+      Vue.set(state.savedEvents, obj.name, _.cloneDeep(obj));
+      this.commit('saveToLocalStorage');
+    },
+    deleteSavedEvent(state, key) {
+      Vue.delete(state.savedEvents, key);
       this.commit('saveToLocalStorage');
     },
   },

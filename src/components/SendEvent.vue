@@ -2,26 +2,12 @@
   <vuestro-modal :active="active || isOpen" @close="onClose" close-on-blur>
 		<template #title>Create Event</template>
 		<template #toolbar>
-		  <vuestro-dropdown right click-to-open>
-		    <template #button>
-    		  <vuestro-button pill variant="info">
-    		    <vuestro-icon name="save"></vuestro-icon>
-    		    <span>Save Event</span>
-    		  </vuestro-button>
-  		  </template>
-		  </vuestro-dropdown>
-		  <vuestro-dropdown right click-to-open>
-		    <template #button>
-    		  <vuestro-button pill variant="success">
-    		    <vuestro-icon name="save"></vuestro-icon>
-    		    <span>Load Event</span>
-    		  </vuestro-button>
-  		  </template>
-		  </vuestro-dropdown>
+      <save-event :eventType="sendEventType" :eventArgs="args"></save-event>
+		  <load-event @load="onLoadEvent"></load-event>
 		</template>
 		<vuestro-container>
 			<vuestro-card>
-				<vuestro-text-field v-model="sendEventType" placeholder="Event Type" hint="e.g. hello.world" :presets="allHandledEvents"></vuestro-text-field>
+				<vuestro-text-field variant="outline" v-model="sendEventType" placeholder="Event Type" hint="e.g. hello.world" :presets="allHandledEvents" @preset="openForEvent"></vuestro-text-field>
   			<vuestro-panel gutter="none" collapsible>
   			  <template #title>Event Arguments (as JSON)</template>
   			  <template #toolbar>
@@ -83,10 +69,16 @@
 
 <script>
 
-/* global Vue, Vuex */
+/* global Vue, Vuex, Event */
+import SaveEvent from '@/components/SaveEvent';
+import LoadEvent from '@/components/LoadEvent';
 
 export default {
   name: 'SendEvent',
+  components: {
+    SaveEvent,
+    LoadEvent,
+  },
   props: {
     active: { type: Boolean, default: false },
   },
@@ -204,6 +196,10 @@ export default {
 
       window.addEventListener('mouseup', handleMouseUp, true);
       window.addEventListener('mousemove', handleMouseMove, true);
+    },
+    onLoadEvent(obj) {
+      this.sendEventType = obj.type;
+      this.args = obj.args;
     },
   }
 };

@@ -53,8 +53,8 @@ export default {
         labels: true,
         distance: 100,
       },
-      selectedSpoke: {},
-      editing: false,
+      selectedSpoke: {},  // the spoke data for the last clicked spoke node
+      editing: false,     // prevent reactive updates while editing
     };
   },
   computed: {
