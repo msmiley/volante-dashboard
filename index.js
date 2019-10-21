@@ -36,6 +36,7 @@ module.exports = {
 		lastEvents: 0,
 		stats: [],
 		logCache: [],
+		enabled: false,
 	},
 	events: {
 		// point VolanteExpress to the dist files for the static-built dashboard
@@ -83,6 +84,7 @@ module.exports = {
 	},
 	methods: {
 		startSocketIO(server) {
+			this.enabled = true;
 			this.$debug('adding socket.io');
 			this.io = socketIo(server);
 			this.io.on('connection', (client) => {
@@ -166,12 +168,14 @@ module.exports = {
 			this.lastEvents = 0;
 		},
 		sendVolanteInfo(dest) {
-			let info = {
-				wheel: this.$hub.getAttached(),
-				uptime: this.$hub.getUptime(),
-				stats: this.stats,
-			};
-			dest.emit('volante.info', info);
+			if (dest && this.enabled) {
+				let info = {
+					wheel: this.$hub.getAttached(),
+					uptime: this.$hub.getUptime(),
+					stats: this.stats,
+				};
+				dest.emit('volante.info', info);
+			}
 		},
 		hrtimeToMS(hrtime) {
 			return hrtime[0] * 1000 + hrtime[1] / 1000000;

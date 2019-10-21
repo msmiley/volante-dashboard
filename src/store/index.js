@@ -25,6 +25,7 @@ export default new Vuex.Store({
     savedEvents: {},
     savedSettings: {
       isMiniSidebar: false,
+      eventSortAsc: true,
     },
   },
   getters: {
@@ -79,6 +80,9 @@ export default new Vuex.Store({
     savedEvents(state) {
       return state.savedEvents;
     },
+    eventSortAsc(state) {
+      return state.savedSettings.eventSortAsc;
+    },
   },
   actions: {
     loadSavedSettings({ commit }) {
@@ -120,6 +124,9 @@ export default new Vuex.Store({
     },
     deleteSavedEvent({ commit }, key) {
       commit('deleteSavedEvent', key);
+    },
+    toggleEventSortDirection({ commit }) {
+      commit('toggleEventSortDirection');
     },
   },
   mutations: {
@@ -208,6 +215,10 @@ export default new Vuex.Store({
     },
     deleteSavedEvent(state, key) {
       Vue.delete(state.savedEvents, key);
+      this.commit('saveToLocalStorage');
+    },
+    toggleEventSortDirection(state) {
+      state.savedSettings.eventSortAsc = !state.savedSettings.eventSortAsc;
       this.commit('saveToLocalStorage');
     },
   },

@@ -69,7 +69,7 @@
 
 <script>
 
-/* global Vue, Vuex, Event */
+/* global Vue, Vuex, Event, _ */
 import SaveEvent from '@/components/SaveEvent';
 import LoadEvent from '@/components/LoadEvent';
 
@@ -117,12 +117,25 @@ export default {
           for (let a of args) {
             // add argument var name as starting buffer value
             this.args.push({
-              buffer: `"${a}"`
+              buffer: `"${a}"`,
+              height: '80px',
             });
           }
         }
       }
       this.sendEventType = evt.split('(')[0];
+      this.isOpen = true;
+    },
+    openWithEvent(e) {
+      this.args = [];
+      this.provideCallback = false;
+      this.sendEventType = e.eventType;
+      for (let a of e.eventArgs) {
+        this.args.push({
+          buffer: JSON.stringify(a, null, 2),
+          height: '80px',
+        });
+      }
       this.isOpen = true;
     },
     onClose() {
@@ -199,7 +212,7 @@ export default {
     },
     onLoadEvent(obj) {
       this.sendEventType = obj.type;
-      this.args = obj.args;
+      this.args = _.cloneDeep(obj.args);
     },
   }
 };

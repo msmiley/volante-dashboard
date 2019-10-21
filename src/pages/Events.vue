@@ -2,7 +2,13 @@
 	<vuestro-container no-wrap shrink class="events-container">
 		<vuestro-card cols="3" color="var(--vuestro-green)">
 			<template #heading>
-				<span>Events</span>
+				<span class="events-toolbar">
+					<span>Events</span>
+					<vuestro-button round no-border variant="text" @click="toggleEventSortDirection">
+						<vuestro-icon v-if="eventSortAsc" name="arrow-up"></vuestro-icon>
+						<vuestro-icon v-else name="arrow-down"></vuestro-icon>
+					</vuestro-button>
+				</span>
 				<span class="events-toolbar">
 					<vuestro-button round no-border @click="createOpen = true">
 						<vuestro-icon name="plus"></vuestro-icon>
@@ -49,13 +55,13 @@
 				</div>
 			</vuestro-panel>
 		</vuestro-card>
-		<send-event :active.sync="createOpen"/>
+		<send-event ref="sendEvent" :active.sync="createOpen"/>
 	</vuestro-container>
 </template>
 
 <script>
 
-/* global _, Vuex, Vue */
+/* global _, Vuex */
 import SendEvent from '@/components/SendEvent';
 
 export default {
@@ -64,15 +70,17 @@ export default {
 		SendEvent,
 	},
 	computed: {
-		...Vuex.mapGetters(['events']),
+		...Vuex.mapGetters(['events', 'eventSortAsc']),
 		filteredEvents() {
+			let f;
 			if (this.searchTerm.length == 0) {
-				return this.events;
+				f = this.events;
 			} else {
-				return _.filter(this.events, (d) => {
+				f = _.filter(this.events, (d) => {
 					return JSON.stringify(d).indexOf(this.searchTerm) > -1;
 				});
 			}
+			return _.orderBy(f, 'ts', this.eventSortAsc ? 'asc':'desc');
 		}
 	},
 	data() {
@@ -85,7 +93,7 @@ export default {
 		};
 	},
 	methods: {
-		...Vuex.mapActions(['clearEvents']),
+		...Vuex.mapActions(['clearEvents', 'toggleEventSortDirection']),
 		onClear() {
 			this.clearEvents();
 			this.currentIdx = -1;
@@ -101,7 +109,7 @@ export default {
 			}
 		},
 		reEmit(e) {
-			Vue.socket.emit('event', e);
+			this.$refs.sendEvent.openWithEvent(e);
 		},
 	}
 };
