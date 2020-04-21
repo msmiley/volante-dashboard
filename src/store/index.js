@@ -185,7 +185,7 @@ export default new Vuex.Store({
       state.topologyNodelist = {
         nodes: [
           {
-            name: 'Volante Hub'
+            name: 'Volante Hub',
           }
         ],
         links: [],

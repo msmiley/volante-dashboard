@@ -27,16 +27,18 @@ module.exports = {
 		user: '',
 		pass: '',
 	},
-	data: {
-		io: null,
-		timer: null,
-		lasthrtime: process.hrtime(),
-		lastUsage: process.cpuUsage(),
-		totalEvents: 0,
-		lastEvents: 0,
-		stats: [],
-		logCache: [],
-		enabled: false,
+	data() {
+		return {
+			io: null,
+			timer: null,
+			lasthrtime: process.hrtime(),
+			lastUsage: process.cpuUsage(),
+			totalEvents: 0,
+			lastEvents: 0,
+			stats: [],
+			logCache: [],
+			enabled: false,
+		};
 	},
 	events: {
 		// point VolanteExpress to the dist files for the static-built dashboard
