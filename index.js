@@ -203,8 +203,10 @@ if (require.main === module) {
 		props: {
 			counter: 0,
 		},
-		data: {
-			increment: 1,
+		data() {
+			return {
+				increment: 1,
+			};
 		},
 	});
 
