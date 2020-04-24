@@ -24,7 +24,7 @@ const webpackConfig = merge(baseWebpackConfig, {
     ],
   },
   output: {
-    publicPath: '/dashboard/',
+    publicPath: '/volante-dashboard/',
     filename: 'static/js/[name].[chunkhash].js',
     chunkFilename: 'static/js/[name].[chunkhash].js'
   },

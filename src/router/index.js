@@ -15,7 +15,7 @@ import Stats from '../pages/Stats';
 import Settings from '../pages/Settings';
 
 export default new Router({
-  base: '/dashboard',
+  base: '/volante-dashboard',
   mode: 'history',
   routes: [
     {

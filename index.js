@@ -43,8 +43,9 @@ module.exports = {
 	events: {
 		// point VolanteExpress to the dist files for the static-built dashboard
 		'VolanteExpress.update'() {
+			// but not in standalone mode
 			if (require.main !== module) {
-				this.$emit('VolanteExpress.use', '/dashboard', (req, res, next) => {
+				this.$emit('VolanteExpress.use', '/volante-dashboard', (req, res, next) => {
 					if (this.user.length > 0 && this.pass.length > 0) {
 						if (req.headers.authorization) {
 							// check authorization header
@@ -59,10 +60,10 @@ module.exports = {
 					}
 					next();
 				});
-				this.$emit('VolanteExpress.use', '/dashboard', connectHistoryApiFallback({
+				this.$emit('VolanteExpress.use', '/volante-dashboard', connectHistoryApiFallback({
 					index: '//index.html',
 				}));
-				this.$emit('VolanteExpress.use', '/dashboard', express.static(__dirname + '/dist'));
+				this.$emit('VolanteExpress.use', '/volante-dashboard', express.static(__dirname + '/dist'));
 			}
 		},
 		// start socket.io when express is ready
@@ -77,6 +78,7 @@ module.exports = {
 				this.io.emit('*', ...args);
 			}
 		},
+		// sanity check event
 		'hello.world'(...args) {
 			if (typeof args[args.length -1] === 'function') {
 				let callback = args.pop();
@@ -85,6 +87,9 @@ module.exports = {
 		},
 	},
 	methods: {
+		//
+		// methods starts the socket.io server and handles events to/from client side
+		//
 		startSocketIO(server) {
 			this.enabled = true;
 			this.$debug('adding socket.io');
@@ -130,6 +135,10 @@ module.exports = {
 			  });
 			});
 		},
+		//
+		// method runs on interval to calculate cpu stats and collect history on cpu 
+		// and connected clients
+		//
 		updateStats() {
 			// update last values
 			this.lasthrtime = process.hrtime(this.lasthrtime);
@@ -169,6 +178,9 @@ module.exports = {
 			// reset interval event counter
 			this.lastEvents = 0;
 		},
+		//
+		// method emits info about volante wheel
+		//
 		sendVolanteInfo(dest) {
 			if (dest && this.enabled) {
 				let info = {
@@ -179,12 +191,16 @@ module.exports = {
 				dest.emit('volante.info', info);
 			}
 		},
+		//
+		// helper method to convert hrtime to milliseconds
+		//
 		hrtimeToMS(hrtime) {
 			return hrtime[0] * 1000 + hrtime[1] / 1000000;
 		}
 	},
 };
 
+// standalone mode
 if (require.main === module) {
 	console.log('running test volante wheel');
 	const volante = require('volante');
