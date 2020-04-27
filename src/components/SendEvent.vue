@@ -34,7 +34,7 @@
 			  <vuestro-container gutter="none">
   			  <vuestro-button checkbox v-model="provideCallback" size="lg">Append callback function argument</vuestro-button>
 			  </vuestro-container>
-			  <vuestro-panel v-if="provideCallback" collapsible>
+			  <vuestro-panel v-if="provideCallback" collapsible overflow-hidden>
 			    <template #title>Last Callback Result</template>
 			    <template #toolbar>
 			      <span v-if="lastCallbackResult && lastCallbackResult.ts">{{ lastCallbackResult.ts | vuestroHMS }}</span>
