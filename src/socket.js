@@ -1,12 +1,13 @@
 /* global io */
 
 import store from './store';
+import * as io from 'socket.io-client/dist/socket.io.js';
 
 export default {
   install(Vue, options) {
 
     Vue.socket = io('', {
-      path: '/socket.io',
+      path: '/volante-dashboard/socket.io',
     });
 
     // handler for volante events

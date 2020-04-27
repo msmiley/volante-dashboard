@@ -93,7 +93,9 @@ module.exports = {
 		startSocketIO(server) {
 			this.enabled = true;
 			this.$debug('adding socket.io');
-			this.io = socketIo(server);
+			this.io = socketIo(server, {
+				path: '/volante-dashboard/socket.io',
+			});
 			this.io.on('connection', (client) => {
 				this.$debug('socket.io client connect');
 				client.emit('volante-dashboard.info', {
