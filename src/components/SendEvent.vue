@@ -2,7 +2,7 @@
   <vuestro-modal :active="active || isOpen" @close="onClose" close-on-blur>
 		<template #title>Create Event</template>
 		<template #toolbar>
-      <save-event :eventType="sendEventType" :eventArgs="args" :callback="provideCallback"></save-event>
+      <save-event :eventType="sendEventType" :eventArgs="args" :provideCallback="provideCallback"></save-event>
 		  <load-event @load="onLoadEvent"></load-event>
 		</template>
 		<vuestro-container>
