@@ -2,7 +2,7 @@
   <vuestro-modal :active="active || isOpen" @close="onClose" close-on-blur>
 		<template #title>Create Event</template>
 		<template #toolbar>
-      <save-event :eventType="sendEventType" :eventArgs="args"></save-event>
+      <save-event :eventType="sendEventType" :eventArgs="args" :callback="provideCallback"></save-event>
 		  <load-event @load="onLoadEvent"></load-event>
 		</template>
 		<vuestro-container>
@@ -30,7 +30,7 @@
           </div>
   			</vuestro-panel>
 			</vuestro-card>
-			<vuestro-card>
+			<vuestro-card overflow-hidden>
 			  <vuestro-container gutter="none">
   			  <vuestro-button checkbox v-model="provideCallback" size="lg">Append callback function argument</vuestro-button>
 			  </vuestro-container>
@@ -213,6 +213,7 @@ export default {
     onLoadEvent(obj) {
       this.sendEventType = obj.type;
       this.args = _.cloneDeep(obj.args);
+      this.provideCallback = obj.provideCallback;
     },
   }
 };

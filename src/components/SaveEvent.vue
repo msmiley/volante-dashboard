@@ -22,6 +22,7 @@ export default {
   props: {
     eventType: { type: String, required: true },
     eventArgs: { type: Array, required: true },
+    provideCallback: { type: Boolean, required: true },
   },
   data() {
     return {
@@ -41,6 +42,7 @@ export default {
           name: this.eventName,
           type: this.eventType,
           args: this.eventArgs,
+          provideCallback: this.provideCallback
         });
         this.$children[0].onBlur();
       }
