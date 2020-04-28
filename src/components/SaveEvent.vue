@@ -1,7 +1,7 @@
 <template>
   <vuestro-dropdown right click-to-open @hover="onShown">
     <template #button>
-		  <vuestro-button pill variant="info">
+		  <vuestro-button pill value variant="info">
 		    <vuestro-icon name="save"></vuestro-icon>
 		    <span>Save Event</span>
 		  </vuestro-button>

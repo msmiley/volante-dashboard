@@ -1,7 +1,7 @@
 <template>
   <vuestro-dropdown right click-to-open close-on-content-click>
     <template #button>
-		  <vuestro-button pill variant="success">
+		  <vuestro-button pill value variant="success">
 		    <vuestro-icon name="hdd"></vuestro-icon>
 		    <span>Load Event</span>
 		  </vuestro-button>
@@ -10,6 +10,7 @@
   	  <vuestro-list-button v-for="(v, k) in savedEvents" :key="k" @click="onLoad(v)">
         {{ k }}
   	  </vuestro-list-button>
+      <div v-if="showNoSavedEvents">No events yet</div>
 	  </template>
 	  <template #buttons>
 	    <span @click="onManageSaved">Manage Events</span>
@@ -24,6 +25,13 @@ export default {
   name: 'LoadEvent',
   computed: {
     ...Vuex.mapGetters(['savedEvents']),
+    noSavedEvents() {
+      if (this.savedEvents) {
+        return Object.keys(this.savedEvents).length === 0;
+      } else {
+        return true;
+      }
+    },
   },
   methods: {
     onLoad(s) {
