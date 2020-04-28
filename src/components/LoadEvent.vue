@@ -25,7 +25,7 @@ export default {
   name: 'LoadEvent',
   computed: {
     ...Vuex.mapGetters(['savedEvents']),
-    noSavedEvents() {
+    showNoSavedEvents() {
       if (this.savedEvents) {
         return Object.keys(this.savedEvents).length === 0;
       } else {

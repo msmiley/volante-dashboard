@@ -21,7 +21,7 @@
                 {{ k }}
                 <vuestro-tooltip rounded position="left">
                   <template #content>
-                    <vuestro-button dark rounded variant="danger" @click="deleteSavedEvent(k)">
+                    <vuestro-button dark rounded value variant="danger" @click="deleteSavedEvent(k)">
                       Delete
                     </vuestro-button>
                   </template>
@@ -32,6 +32,7 @@
                   </template>
                 </vuestro-tooltip>
               </div>
+              <div class="saved-event" v-if="Object.keys(savedEvents).length === 0">No saved events</div>
             </template>
           </vuestro-panel>
         </vuestro-card>
