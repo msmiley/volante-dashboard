@@ -72,10 +72,12 @@ module.exports = {
 		},
 		// catch all volante events and forward to all clients
 		'*'(...args) {
-			this.lastEvents++;
-			this.totalEvents++;
-			if (this.io) {
-				this.io.of('/volante-dashboard').emit('*', ...args);
+			if (!args[0].startsWith('VolanteDashboard')) { // prevent loops
+				this.lastEvents++;
+				this.totalEvents++;
+				if (this.io) {
+					this.io.of('/volante-dashboard').emit('*', ...args);
+				}
 			}
 		},
 		// sanity check event
