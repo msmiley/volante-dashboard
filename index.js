@@ -96,6 +96,11 @@ module.exports = {
 			this.io = socketIo(server, {
 				path: '/volante-dashboard/socket.io',
 			});
+			// broadcast client connections to listeners
+			this.io.on('connection', (client) => {
+				this.$emit('VolanteDashboard.socket.io.connection', client);
+			});
+			// use room for volante-dashboard specific socket.io traffic
 			this.io.of('/volante-dashboard').on('connection', (client) => {
 				this.$debug('volante-dashboard socket.io client connect');
 				// always send basic info
