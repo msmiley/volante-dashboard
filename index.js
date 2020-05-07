@@ -100,16 +100,14 @@ module.exports = {
 			});
 			// broadcast client connections to listeners
 			this.io.on('connection', (client) => {
+				this.sendAppInfo(client);
 				this.$emit('VolanteDashboard.socket.io.connection', client);
 			});
 			// use room for volante-dashboard specific socket.io traffic
 			this.io.of('/volante-dashboard').on('connection', (client) => {
 				this.$debug('volante-dashboard socket.io client connect');
 				// always send basic info
-				client.emit('volante-dashboard.info', {
-					title: this.title,
-					version: this.version,
-				});
+				this.sendAppInfo(client);
 				this.sendVolanteInfo(client);
 				// receive events from client side to re-emit on volante
 			  client.on('event', (data) => {
@@ -189,7 +187,18 @@ module.exports = {
 			this.lastEvents = 0;
 		},
 		//
-		// method emits info about volante wheel
+		// method sends info about volante-dashboard-powered app
+		//
+		sendAppInfo(dest) {
+			if (dest && this.enabled) {
+				dest.emit('volante-dashboard.info', {
+					title: this.title,
+					version: this.version,
+				});
+			}
+		},
+		//
+		// method emits info about volante wheel landscape
 		//
 		sendVolanteInfo(dest) {
 			if (dest && this.enabled) {
