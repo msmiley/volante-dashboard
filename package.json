@@ -28,6 +28,7 @@
     "terser-webpack-plugin": "^1.2.3",
     "url-loader": "^1.1.2",
     "volante": "^3.0.1",
+    "volante-console": "^2.3.1",
     "volante-express": "^2.9.1",
     "vue": "^2.6.10",
     "vue-awesome": "^3.5.1",
