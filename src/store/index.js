@@ -67,7 +67,13 @@ export default new Vuex.Store({
     allHandledEvents(state) {
       let ret = [];
       for (let m of state.topology) {
-        ret = ret.concat(m.handledEvents);
+        if (m.handledEvents) {
+          for (let e of m.handledEvents) {
+            if (e && !e.startsWith('*')) {
+              ret.push(e);
+            }
+          }
+        }
       }
       return _.uniq(ret);
     },

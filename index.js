@@ -97,44 +97,50 @@ module.exports = {
 				path: '/volante-dashboard/socket.io',
 			});
 			this.io.on('connection', (client) => {
-				this.$debug('socket.io client connect');
+				// always send basic info
 				client.emit('volante-dashboard.info', {
 					title: this.title,
 					version: this.version,
 				});
-				this.sendVolanteInfo(client);
-				// receive events from client side to re-emit on volante
-			  client.on('event', (data) => {
-			  	this.$debug('socket.io event from client', data);
-			  	if (data.eventCallback) {
-			  		// if eventCallback set, add a callback to the end the event args
-			  		// for the handler to call
-			  		data.eventArgs.push(function (err, result) {
-			  			client.emit('callback-result', [err, result]);
-			  		});
-			  	}
-			  	this.$emit(data.eventType, ...data.eventArgs);
-		  	});
-		  	// process events to edit volante spoke state
-		  	client.on('spoke.update', (spokeData) => {
-					this.$debug('updating spoke module', spokeData);
-					let spoke = this.$hub.getInstanceByName(spokeData.name);
-					if (spoke) {
-				    let path = spokeData.key.split('.');
-				    let prefix = path.shift();
-						// new val should be either in props. or data.
-						if (prefix === 'data' || prefix === 'props') {
-					    var i;
-					    for (i = 0; i < path.length - 1; i++) {
-				        spoke = spoke[path[i]];
-					    }
-					    spoke[path[i]] = spokeData.val;
+				// only set up events if this is a Volante Dashboard
+				if (client.handshake.query.isVolanteDashboard === 'true') {
+					this.$debug('socket.io client connect');
+					this.sendVolanteInfo(client);
+					// receive events from client side to re-emit on volante
+				  client.on('event', (data) => {
+				  	this.$debug('socket.io event from client', data);
+				  	if (data.eventCallback) {
+				  		// if eventCallback set, add a callback to the end the event args
+				  		// for the handler to call
+				  		data.eventArgs.push(function (err, result) {
+				  			client.emit('callback-result', [err, result]);
+				  		});
+				  	}
+				  	this.$emit(data.eventType, ...data.eventArgs);
+			  	});
+			  	// process events to edit volante spoke state
+			  	client.on('spoke.update', (spokeData) => {
+						this.$debug('updating spoke module', spokeData);
+						let spoke = this.$hub.getInstanceByName(spokeData.name);
+						if (spoke) {
+					    let path = spokeData.key.split('.');
+					    let prefix = path.shift();
+							// new val should be either in props. or data.
+							if (prefix === 'data' || prefix === 'props') {
+						    var i;
+						    for (i = 0; i < path.length - 1; i++) {
+					        spoke = spoke[path[i]];
+						    }
+						    spoke[path[i]] = spokeData.val;
+							}
 						}
-					}
-		  	});
-			  client.on('disconnect', () => {
-			  	this.$debug('socket.io client disconnect');
-			  });
+			  	});
+				  client.on('disconnect', () => {
+				  	this.$debug('socket.io client disconnect');
+				  });
+				} else {
+					this.$debug('non-VolanteDashboard socket.io connection');
+				}
 			});
 		},
 		//
