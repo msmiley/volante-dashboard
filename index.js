@@ -12,8 +12,12 @@ module.exports = {
   	this.updateStats();
   	// start timer to send stats to all clients
   	this.timer = setInterval(() => {
-  		this.updateStats();
-  		this.sendVolanteInfo(this.io.of('/volante-dashboard'));
+  		if (this.io) {
+	  		this.updateStats();
+	  		this.sendVolanteInfo(this.io.of('/volante-dashboard'));
+  		} else {
+  			this.$warn("no socket.io server");
+  		}
 		}, this.statsInterval);
 	},
 	done() {
@@ -144,7 +148,7 @@ module.exports = {
 			});
 		},
 		//
-		// method runs on interval to calculate cpu stats and collect history on cpu 
+		// method runs on interval to calculate cpu stats and collect history on cpu
 		// and connected clients
 		//
 		updateStats() {
