@@ -14,11 +14,7 @@ export default new Vuex.Store({
     uptime: null,
     topology: [],
     topologyNodelist: {
-      nodes: [
-        {
-          name: 'Volante Hub'
-        }
-      ],
+      nodes: [],
       links: [],
     },
     savedLoaded: false,
@@ -189,18 +185,14 @@ export default new Vuex.Store({
     setTopology(state, topology) {
       state.topology = topology;
       state.topologyNodelist = {
-        nodes: [
-          {
-            name: 'Volante Hub',
-          }
-        ],
+        nodes: [],
         links: [],
       };
-      let cnt = 1;
+      let cnt = 0;
       for (let t of topology) {
         state.topologyNodelist.nodes.push(t);
         state.topologyNodelist.links.push({
-          source: 0,
+          source: 0, // hub will always be the first entry, until we cluster
           target: cnt++,
         });
       }
