@@ -184,10 +184,10 @@ export default new Vuex.Store({
     },
     setTopology(state, topology) {
       state.topology = topology;
-      state.topologyNodelist = {
-        nodes: [],
-        links: [],
-      };
+      // reset nodelist
+      state.topologyNodelist.nodes = [];
+      state.topologyNodelist.links = [];
+
       let cnt = 0;
       for (let t of topology) {
         state.topologyNodelist.nodes.push(t);
