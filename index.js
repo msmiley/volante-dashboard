@@ -30,6 +30,7 @@ module.exports = {
 		statsHistory: 60,
 		user: '',
 		pass: '',
+		path: '/volante-dashboard',
 	},
 	data() {
 		return {
@@ -49,7 +50,7 @@ module.exports = {
 		'VolanteExpress.update'() {
 			// but not in standalone mode
 			if (require.main !== module) {
-				this.$emit('VolanteExpress.use', '/volante-dashboard', (req, res, next) => {
+				this.$emit('VolanteExpress.use', this.path, (req, res, next) => {
 					if (this.user.length > 0 && this.pass.length > 0) {
 						if (req.headers.authorization) {
 							// check authorization header
@@ -64,10 +65,11 @@ module.exports = {
 					}
 					next();
 				});
-				this.$emit('VolanteExpress.use', '/volante-dashboard', connectHistoryApiFallback({
+				this.$emit('VolanteExpress.use', this.path, connectHistoryApiFallback({
 					index: '//index.html',
 				}));
-				this.$emit('VolanteExpress.use', '/volante-dashboard', express.static(__dirname + '/dist'));
+				this.$emit('VolanteExpress.use', this.path, express.static(__dirname + '/dist'));
+				this.$log(`listening on ${this.path}`);
 			}
 		},
 		// start socket.io when express is ready
