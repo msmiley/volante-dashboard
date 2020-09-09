@@ -7,7 +7,7 @@
           <vuestro-panel>
             <template #title>General</template>
             <template #default>
-              <vuestro-container>
+              <vuestro-container items-start>
                 <vuestro-button checkbox :value="isMiniSidebar" @click="toggleSidebar">Mini Sidebar</vuestro-button>
               </vuestro-container>
             </template>
