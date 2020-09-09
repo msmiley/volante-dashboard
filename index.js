@@ -258,6 +258,7 @@ if (require.main === module) {
 
 	hub.emit('VolanteExpress.update', {
 		bind: '0.0.0.0',
+		port: 3030,
 		middleware: [
 			require('webpack-hot-middleware')(compiler, {
 		    log: false,
