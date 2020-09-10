@@ -7,7 +7,7 @@
 		</template>
 		<vuestro-container>
 			<vuestro-card>
-				<vuestro-text-field variant="outline" v-model="sendEventType" placeholder="Event Type" hint="e.g. hello.world" :presets="allHandledEvents" @preset="openForEvent"></vuestro-text-field>
+				<vuestro-text-field variant="outline" size="lg" v-model="sendEventType" placeholder="Event Type" hint="e.g. hello.world" :presets="allHandledEvents" @preset="openForEvent"></vuestro-text-field>
   			<vuestro-panel gutter="none" collapsible>
   			  <template #title>Event Arguments (as JSON)</template>
   			  <template #toolbar>
@@ -18,7 +18,7 @@
           <div v-for="(arg, idx) in args" class="event-arg-block">
             <div class="event-arg-sidebar">
               <span>{{ idx }}</span>
-              <vuestro-button round no-border variant="danger" size="lg" @click="onDeleteArg(idx)">
+              <vuestro-button round no-border variant="danger" @click="onDeleteArg(idx)">
                 <vuestro-icon name="trash"></vuestro-icon>
               </vuestro-button>
             </div>
@@ -32,7 +32,7 @@
 			</vuestro-card>
 			<vuestro-card overflow-hidden>
 			  <vuestro-container gutter="none">
-  			  <vuestro-button checkbox v-model="provideCallback" size="lg">Append callback function argument</vuestro-button>
+  			  <vuestro-button checkbox v-model="provideCallback" size="sm">Append callback function argument</vuestro-button>
 			  </vuestro-container>
 			  <vuestro-panel v-if="provideCallback" collapsible overflow-hidden>
 			    <template #title>Last Callback Result</template>

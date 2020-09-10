@@ -7,8 +7,9 @@
           <vuestro-panel>
             <template #title>General</template>
             <template #default>
-              <vuestro-container items-start>
+              <vuestro-container items-start column>
                 <vuestro-button checkbox :value="isMiniSidebar" @click="toggleSidebar">Mini Sidebar</vuestro-button>
+                <vuestro-button checkbox :value="isDarkUI" @click="toggleIsDarkUI">Dark UI</vuestro-button>
               </vuestro-container>
             </template>
           </vuestro-panel>
@@ -47,10 +48,10 @@
 export default {
   name: 'Settings',
   computed: {
-    ...Vuex.mapGetters(['isMiniSidebar', 'savedEvents']),
+    ...Vuex.mapGetters(['isMiniSidebar', 'savedEvents', 'isDarkUI']),
   },
   methods: {
-    ...Vuex.mapActions(['toggleSidebar', 'deleteSavedEvent']),
+    ...Vuex.mapActions(['toggleSidebar', 'deleteSavedEvent', 'toggleIsDarkUI']),
   },
 };
 

@@ -1,7 +1,7 @@
 <template>
   <vuestro-dropdown right click-to-open close-on-content-click>
     <template #button>
-		  <vuestro-button pill value variant="success">
+		  <vuestro-button pill value variant="success" size="sm">
 		    <vuestro-icon name="hdd"></vuestro-icon>
 		    <span>Load Event</span>
 		  </vuestro-button>

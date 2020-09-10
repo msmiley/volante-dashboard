@@ -73,6 +73,10 @@ export default {
   position: relative;
   background-color: var(--vuestro-light-med);
   overflow: hidden;
+  color: var(--vuestro-text-color);
+}
+.vuestro-dark .navbar-stats > div {
+  background-color: var(--vuestro-darker);
 }
 
 .cpu-chart:before {

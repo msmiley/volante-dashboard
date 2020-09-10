@@ -1,13 +1,13 @@
 <template>
   <vuestro-dropdown right click-to-open @hover="onShown">
     <template #button>
-		  <vuestro-button pill value variant="info">
+		  <vuestro-button pill value variant="info" size="sm">
 		    <vuestro-icon name="save"></vuestro-icon>
 		    <span>Save Event</span>
 		  </vuestro-button>
 	  </template>
 	  <template #default>
-  	  <vuestro-text-field ref="textField" hint="Save Event As..." dark variant="outline" v-model="eventName" clearable></vuestro-text-field>
+  	  <vuestro-text-field ref="textField" placeholder="Save Event As..." dark variant="outline" v-model="eventName" clearable></vuestro-text-field>
 	  </template>
 	  <template #buttons>
 	    <span @click="onSave">Save</span>

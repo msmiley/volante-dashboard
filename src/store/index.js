@@ -23,6 +23,7 @@ export default new Vuex.Store({
       isMiniSidebar: false,
       eventSortAsc: true,
     },
+    isDarkUI: false,
   },
   getters: {
     title(state) {
@@ -85,6 +86,9 @@ export default new Vuex.Store({
     eventSortAsc(state) {
       return state.savedSettings.eventSortAsc;
     },
+    isDarkUI(state) {
+      return state.isDarkUI;
+    },
   },
   actions: {
     loadSavedSettings({ commit }) {
@@ -129,6 +133,9 @@ export default new Vuex.Store({
     },
     toggleEventSortDirection({ commit }) {
       commit('toggleEventSortDirection');
+    },
+    toggleIsDarkUI({ commit }) {
+      commit('toggleIsDarkUI');
     },
   },
   mutations: {
@@ -218,6 +225,9 @@ export default new Vuex.Store({
     toggleEventSortDirection(state) {
       state.savedSettings.eventSortAsc = !state.savedSettings.eventSortAsc;
       this.commit('saveToLocalStorage');
+    },
+    toggleIsDarkUI(state) {
+      state.isDarkUI = !state.isDarkUI;
     },
   },
 });
