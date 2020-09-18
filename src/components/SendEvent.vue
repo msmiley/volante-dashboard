@@ -8,6 +8,7 @@
 		<vuestro-container>
 			<vuestro-card>
 				<vuestro-text-field variant="outline" size="lg" v-model="sendEventType" placeholder="Event Type" hint="e.g. hello.world" :presets="allHandledEvents" @preset="openForEvent"></vuestro-text-field>
+				<div style="height: 20px"></div>
   			<vuestro-panel gutter="none" collapsible>
   			  <template #title>Event Arguments (as JSON)</template>
   			  <template #toolbar>

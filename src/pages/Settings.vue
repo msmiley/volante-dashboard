@@ -20,7 +20,7 @@
             <template #default>
               <div v-for="(v, k) in savedEvents" :key="k" class="saved-event">
                 {{ k }}
-                <vuestro-tooltip rounded position="left">
+                <vuestro-tooltip rounded position="left" no-padding>
                   <template #content>
                     <vuestro-button dark rounded value variant="danger" @click="deleteSavedEvent(k)">
                       Delete
@@ -65,8 +65,8 @@ export default {
   align-items: center;
   padding: 5px 15px;
 }
-.saved-event:nth-child(2n) {
-  background-color: var(--vuestro-light);
+.saved-event:nth-child(odd) {
+  background-color: rgba(0,0,0,0.1);
 }
 
 </style>

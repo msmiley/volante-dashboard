@@ -31,7 +31,7 @@
 							<vuestro-button round no-border @click="reEmit(e)">
 								<vuestro-icon name="share-square"></vuestro-icon>
 							</vuestro-button>
-							{{ e.eventType }}
+							<span>{{ e.eventType }}</span>
 						</div>
 						<div>{{ e.ts | vuestroHMS }}</div>
 					</div>
@@ -139,6 +139,7 @@ export default {
 	font-weight: 600;
 	color: var(--vuestro-indigo);
 	display: flex;
+	align-items: center;
 }
 .events-sidebar {
 	display: flex;

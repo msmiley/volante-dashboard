@@ -16,6 +16,8 @@ export default {
     return {
       cpuOptions: {
         categoryKey: 'ts',
+        slide: true,
+        transition: 5000,
         series: [
           {
             title: 'CPU',
@@ -28,6 +30,8 @@ export default {
       },
       memOptions: {
         categoryKey: 'ts',
+        slide: true,
+        transition: 5000,
         series: [
           {
             title: 'Memory',
@@ -39,6 +43,8 @@ export default {
       },
       eventOptions: {
         categoryKey: 'ts',
+        slide: true,
+        transition: 5000,
         series: [
           {
             title: 'Events',

@@ -49,22 +49,20 @@
 								</vuestro-container>
 							</span>
 						</td>
-						<td>
-							<div class="message-column-object-toolbar">
-								<vuestro-tooltip position="left" no-wrap rounded>
-				          <template #content>Download Message as JSON</template>
-									<vuestro-button round no-border @click="vuestroDownloadAsJson(item, 'log.json')">
-										<vuestro-icon name="download"></vuestro-icon>
-									</vuestro-button>
-								</vuestro-tooltip>
-								<vuestro-tooltip position="left" no-wrap rounded>
-				          <template #content>View Raw Message</template>
-									<vuestro-button round no-border @click="onShowRaw(item)">
-										<vuestro-icon name="stream"></vuestro-icon>
-									</vuestro-button>
-								</vuestro-tooltip>
-							</div>
-						</td>
+					</template>
+					<template #row-buttons>
+						<vuestro-tooltip position="left" no-wrap rounded>
+		          <template #content>Download Message as JSON</template>
+							<vuestro-button round no-border @click="vuestroDownloadAsJson(item, 'log.json')">
+								<vuestro-icon name="download"></vuestro-icon>
+							</vuestro-button>
+						</vuestro-tooltip>
+						<vuestro-tooltip position="left" no-wrap rounded>
+		          <template #content>View Raw Message</template>
+							<vuestro-button round no-border @click="onShowRaw(item)">
+								<vuestro-icon name="stream"></vuestro-icon>
+							</vuestro-button>
+						</vuestro-tooltip>
 					</template>
 				</vuestro-table>
 			</vuestro-panel>
@@ -119,9 +117,6 @@ export default {
 						title: 'Message',
 						field: 'msg'
 					},
-					{
-						padding: 0
-					}
 				]
 			},
 		};
@@ -189,12 +184,6 @@ export default {
 
 .message-column {
 	margin-right: 2px;
-}
-
-.message-column-object-toolbar {
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
 }
 
 </style>

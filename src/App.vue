@@ -32,7 +32,6 @@ export default {
   data() {
     return {
       dashboardVersion: __VERSION__,
-      logo: require('@/assets/volante.svg'),
     };
   },
   computed: {
@@ -66,6 +65,10 @@ body {
 .default-footer img {
   width: 13px;
   height: 13px;
+}
+
+.vuestro-app {
+  --vuestro-navbar-separator: none !important;
 }
 
 </style>
