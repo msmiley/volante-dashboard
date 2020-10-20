@@ -82,7 +82,7 @@ module.exports = {
 				this.lastEvents++;
 				this.totalEvents++;
 				if (this.io) {
-					this.io.of('/volante-dashboard').emit('*', ...args);
+					this.io.of('/volante-dashboard').emit('volante.event', ...args);
 				}
 			}
 		},
@@ -104,6 +104,8 @@ module.exports = {
 			this.io = socketIo(server, {
 				path: '/volante-dashboard/socket.io',
 			});
+			// let clients access io
+			this.$emit('VolanteDashboard.socket.io', this.io);
 			// broadcast client connections to listeners
 			this.io.on('connection', (client) => {
 				this.sendAppInfo(client);

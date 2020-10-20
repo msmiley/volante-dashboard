@@ -11,7 +11,7 @@ export default {
     });
 
     // handler for volante events
-    Vue.socket.on('*', (...args) => {
+    Vue.socket.on('volante.event', (...args) => {
       store.dispatch('addEvent', args);
     });
 
