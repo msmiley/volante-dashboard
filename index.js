@@ -1,6 +1,7 @@
 const express = require('express');
 const connectHistoryApiFallback = require('connect-history-api-fallback');
 const socketIo = require('socket.io');
+const volante = require('volante');
 
 //
 // Export a Volante module which leverages VolanteExpress to expose a
@@ -25,7 +26,7 @@ module.exports = {
 	},
 	props: {
 		title: 'volante',
-		version: '0.0.0',
+		version: volante.parentVersion,
 		statsInterval: 5000,
 		statsHistory: 60,
 		user: '',
