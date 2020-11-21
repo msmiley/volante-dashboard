@@ -11,7 +11,7 @@
     "test": "npm start",
     "dev": "npm start",
     "start": "node index.js",
-    "prepare": "webpack --config ./node_modules/vuestro/build/webpack.prod.config.js"
+    "prepare": "webpack --config ./webpack.config.js"
   },
   "dependencies": {
     "connect-history-api-fallback": "^1.6.0",
