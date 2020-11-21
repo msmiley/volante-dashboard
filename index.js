@@ -48,10 +48,10 @@ module.exports = {
   },
   events: {
     // point VolanteExpress to the dist files for the static-built dashboard
-    'VolanteExpress.update'() {
+    'VolanteExpress.pre-start'(app) {
       // but not in standalone mode
       if (require.main !== module) {
-        this.$emit('VolanteExpress.use', this.path, (req, res, next) => {
+        app.use(this.path, (req, res, next) => {
           if (this.user.length > 0 && this.pass.length > 0) {
             if (req.headers.authorization) {
               // check authorization header
@@ -66,10 +66,10 @@ module.exports = {
           }
           next();
         });
-        this.$emit('VolanteExpress.use', this.path, connectHistoryApiFallback({
+        app.use(this.path, connectHistoryApiFallback({
           index: '//index.html',
         }));
-        this.$emit('VolanteExpress.use', this.path, express.static(__dirname + '/dist'));
+        app.use(this.path, express.static(__dirname + '/dist'));
         this.$log(`listening on ${this.path}`);
       }
     },
