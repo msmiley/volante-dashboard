@@ -9,8 +9,10 @@
 					<vuestro-button rounded v-model="showWarning" variant="warning">Warning</vuestro-button>
 					<vuestro-button rounded v-model="showError" variant="danger">Error</vuestro-button>
 					<vuestro-button rounded no-border @click="clearLogEvents">
-						<vuestro-icon name="ban"></vuestro-icon>
-						<span>Clear</span>
+						<template #icon>
+							<vuestro-icon name="ban"></vuestro-icon>
+						</template>
+						Clear
 					</vuestro-button>
 					<vuestro-tooltip position="bottom" no-wrap rounded>
 	          <template #content>Download entire log as JSON</template>

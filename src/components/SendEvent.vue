@@ -61,8 +61,10 @@
 		</vuestro-container>
 		<template #buttons>
 			<vuestro-button variant="success" :disabled="!valid || sendEventType.length === 0" @click="onSend">
-				<vuestro-icon name="rocket"></vuestro-icon>
-				<span>Send</span>
+			  <template #icon>
+  				<vuestro-icon name="rocket"></vuestro-icon>
+				</template>
+				Send
 			</vuestro-button>
 		</template>
 	</vuestro-modal>

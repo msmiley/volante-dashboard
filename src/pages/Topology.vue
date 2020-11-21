@@ -3,9 +3,9 @@
     <vuestro-card cols="6" color="var(--vuestro-gold)" overflow-hidden>
       <template #heading>
         Topology
-				<vuestro-button round no-border @click="vuestroDownloadAsJson(topology, 'topology.json')">
-					<vuestro-icon name="download"></vuestro-icon>
-				</vuestro-button>
+        <vuestro-button round no-border @click="vuestroDownloadAsJson(topology, 'topology.json')">
+          <vuestro-icon name="download"></vuestro-icon>
+        </vuestro-button>
       </template>
       <vuestro-force-graph :data="topologyNodelist" :options="graphOptions" @select="onSelectSpoke"></vuestro-force-graph>
     </vuestro-card>
@@ -13,11 +13,23 @@
       <vuestro-panel stretch scroll>
         <template #title>Module Data</template>
         <template #toolbar>
-					<vuestro-button pill no-border @click="$refs.ob.expandAll()"><vuestro-icon name="plus"></vuestro-icon><span>Expand All</span></vuestro-button>
-					<vuestro-button pill no-border @click="$refs.ob.collapseAll()"><vuestro-icon name="minus"></vuestro-icon><span>Collapse All</span></vuestro-button>
-					<vuestro-button round no-border @click="vuestroDownloadAsJson(selectedSpoke, 'spoke.json')"><vuestro-icon name="download"></vuestro-icon></vuestro-button>
-				</template>
-				<div v-if="Object.keys(selectedSpoke).length == 0" class="no-data">Select a module to see its current state</div>
+          <vuestro-button pill no-border @click="$refs.ob.expandAll()">
+            <template #icon>
+              <vuestro-icon name="plus"></vuestro-icon>
+            </template>
+            Expand All
+          </vuestro-button>
+          <vuestro-button pill no-border @click="$refs.ob.collapseAll()">
+            <template #icon>
+              <vuestro-icon name="minus"></vuestro-icon>
+            </template>
+            Collapse All
+          </vuestro-button>
+          <vuestro-button round no-border @click="vuestroDownloadAsJson(selectedSpoke, 'spoke.json')">
+            <vuestro-icon name="download"></vuestro-icon>
+          </vuestro-button>
+        </template>
+        <div v-if="Object.keys(selectedSpoke).length == 0" class="no-data">Select a module to see its current state</div>
         <vuestro-object-browser v-else
                                 ref="ob"
                                 :data="selectedSpoke"
@@ -94,7 +106,7 @@ export default {
 <style scoped>
 
 .topology-container {
-	overflow: hidden;
+  overflow: hidden;
 }
 
 .no-data {

@@ -20,6 +20,18 @@ module.exports = {
         this.$warn("no socket.io server");
       }
     }, this.statsInterval);
+    
+    // pre-fill stats array
+    let now = new Date();
+    for (let i=this.statsHistory; i>0; i--) {
+      this.stats.push({
+        ts: new Date(now - this.statsInterval*i),
+        events: [],
+        cpu: 0,
+        memory: 0,
+        clients: [],
+      });
+    }
   },
   done() {
     this.timer && clearInterval(this.timer);

@@ -42,11 +42,23 @@
 			<vuestro-panel stretch scroll class="event-data-panel">
 				<template #title>Event Data</template>
 				<template #toolbar>
-					<vuestro-button pill no-border @click="$refs.ob.expandAll()"><vuestro-icon name="plus"></vuestro-icon><span>Expand All</span></vuestro-button>
-					<vuestro-button pill no-border @click="$refs.ob.collapseAll()"><vuestro-icon name="minus"></vuestro-icon><span>Collapse All</span></vuestro-button>
+					<vuestro-button pill no-border @click="$refs.ob.expandAll()">
+						<template #icon>
+							<vuestro-icon name="plus"></vuestro-icon>
+						</template>
+						Expand All
+					</vuestro-button>
+					<vuestro-button pill no-border @click="$refs.ob.collapseAll()">
+						<template #icon>
+							<vuestro-icon name="minus"></vuestro-icon>
+						</template>
+						Collapse All
+					</vuestro-button>
 					<vuestro-tooltip position="bottom" no-wrap rounded>
 	          <template #content>Download event data as JSON</template>
-						<vuestro-button round no-border @click="vuestroDownloadAsJson(currentObject, 'event.json')"><vuestro-icon name="download"></vuestro-icon></vuestro-button>
+						<vuestro-button round no-border @click="vuestroDownloadAsJson(currentObject, 'event.json')">
+							<vuestro-icon name="download"></vuestro-icon>
+						</vuestro-button>
 					</vuestro-tooltip>
 				</template>
 				<div class="event-data">
@@ -137,7 +149,7 @@ export default {
 }
 .event > .type {
 	font-weight: 600;
-	color: var(--vuestro-indigo);
+	color: var(--vuestro-primary);
 	display: flex;
 	align-items: center;
 }
