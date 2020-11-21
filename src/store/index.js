@@ -23,7 +23,7 @@ export default new Vuex.Store({
       isMiniSidebar: false,
       eventSortAsc: true,
     },
-    isDarkUI: false,
+    isDarkUI: true,
   },
   getters: {
     title(state) {
