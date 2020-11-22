@@ -39,9 +39,10 @@
                                 @change="onDataChange">
           <template #post-value="{ k, v, parent}">
             <vuestro-button v-if="parent === 'handledEvents' || parent === 'emittedEvents'"
-                            round 
-                            no-border 
-                            no-margin 
+                            round
+                            size="sm"
+                            no-border
+                            no-margin
                             @click="$refs.sendEvent.openForEvent(v)">
               <vuestro-icon name="share-square"></vuestro-icon>
             </vuestro-button>
