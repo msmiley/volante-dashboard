@@ -4,12 +4,16 @@
     <template #toolbar>
       <vuestro-button pill no-border @click="paused = !paused" :value="paused">
         <template v-if="paused">
-          <vuestro-icon name="play"></vuestro-icon>
-          <span>Play</span>
+        	<template #icon>
+	          <vuestro-icon name="play"></vuestro-icon>
+        	</template>
+          Play
         </template>
         <template v-else>
-          <vuestro-icon name="pause"></vuestro-icon>
-          <span>Pause</span>
+        	<template #icon>
+	          <vuestro-icon name="pause"></vuestro-icon>
+          </template>
+          Pause
         </template>
       </vuestro-button>
     </template>
