@@ -26,7 +26,7 @@ module.exports = {
     for (let i=this.statsHistory; i>0; i--) {
       this.stats.push({
         ts: new Date(now - this.statsInterval*i),
-        events: [],
+        events: 0,
         cpu: 0,
         memory: 0,
         clients: [],

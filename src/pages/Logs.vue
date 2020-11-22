@@ -46,7 +46,7 @@
 						<td>
 							<span v-for="o in item.msg" class="message-column align-left">
 								<vuestro-pill v-if="typeof(o) == 'string'" :title="o"></vuestro-pill>
-								<vuestro-container space-between v-else gutter="none">
+								<vuestro-container space-between v-else gutter="none" no-grow overflow-hidden>
 									<vuestro-object-browser :data="o"></vuestro-object-browser>
 								</vuestro-container>
 							</span>
