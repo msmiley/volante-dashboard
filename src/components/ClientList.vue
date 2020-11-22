@@ -3,16 +3,18 @@
     <template #title>Dashboard Connections</template>
     <template #toolbar>
       <vuestro-button pill no-border @click="paused = !paused" :value="paused">
-        <template v-if="paused">
-        	<template #icon>
+      	<template #icon>
+	        <template v-if="paused">
 	          <vuestro-icon name="play"></vuestro-icon>
         	</template>
-          Play
-        </template>
-        <template v-else>
-        	<template #icon>
+	        <template v-else>
 	          <vuestro-icon name="pause"></vuestro-icon>
           </template>
+        </template>
+        <template v-if="paused">
+	        Play
+        </template>
+        <template v-else>
           Pause
         </template>
       </vuestro-button>
