@@ -56,7 +56,7 @@ module.exports = {
       lastEvents: 0,
       stats: [],
       logCache: [],
-      enabled: false,
+      socketEnabled: false,
     };
   },
   events: {
@@ -115,11 +115,11 @@ module.exports = {
     // methods starts the socket.io server and handles events to/from client side
     //
     startSocketIO(server) {
-      this.enabled = true;
       this.$debug('starting volante-dashboard socket.io');
       this.io = socketIo(server, {
         path: '/volante-dashboard/socket.io',
       });
+      this.socketEnabled = true;
       // let clients access io
       this.$emit('VolanteDashboard.socket.io', this.io);
       // broadcast client connections to listeners
@@ -214,7 +214,7 @@ module.exports = {
     // method sends info about volante-dashboard-powered app
     //
     sendAppInfo(dest) {
-      if (dest && this.enabled) {
+      if (dest && this.socketEnabled) {
         dest.emit('volante-dashboard.info', {
           title: this.title,
           version: this.version,
@@ -225,7 +225,7 @@ module.exports = {
     // method emits info about volante wheel landscape
     //
     sendVolanteInfo(dest) {
-      if (dest && this.enabled) {
+      if (dest && this.socketEnabled) {
         let info = {
           wheel: this.$hub.getAttached(),
           uptime: this.$hub.getUptime(),
