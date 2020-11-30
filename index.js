@@ -20,7 +20,7 @@ module.exports = {
         this.$warn("no socket.io server");
       }
     }, this.statsInterval);
-    
+
     // pre-fill stats array
     let now = new Date();
     for (let i=this.statsHistory; i>0; i--) {
@@ -37,6 +37,7 @@ module.exports = {
     this.timer && clearInterval(this.timer);
   },
   props: {
+    enabled: true,
     title: 'volante',
     version: volante.parentVersion,
     statsInterval: 5000,
@@ -62,7 +63,7 @@ module.exports = {
     // point VolanteExpress to the dist files for the static-built dashboard
     'VolanteExpress.pre-start'(app) {
       // but not in standalone mode
-      if (require.main !== module) {
+      if (this.enabled && require.main !== module) {
         app.use(this.path, (req, res, next) => {
           if (this.user.length > 0 && this.pass.length > 0) {
             if (req.headers.authorization) {
@@ -87,11 +88,13 @@ module.exports = {
     },
     // start socket.io when express is ready
     'VolanteExpress.listening'(obj) {
-      this.startSocketIO(obj.server);
+      if (this.enabled) {
+        this.startSocketIO(obj.server);
+      }
     },
     // catch all volante events and forward to all clients
     '*'(...args) {
-      if (!args[0].startsWith('VolanteDashboard')) { // prevent loops
+      if (this.enabled && !args[0].startsWith('VolanteDashboard')) { // prevent loops
         this.lastEvents++;
         this.totalEvents++;
         if (this.io) {
