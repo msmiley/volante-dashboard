@@ -8,7 +8,6 @@
   "license": "ISC",
   "main": "index.js",
   "scripts": {
-    "test": "npm start",
     "dev": "npm start",
     "start": "node index.js",
     "prepare": "webpack --config ./webpack.config.js"
@@ -36,7 +35,7 @@
     "vue-router": "^3.4.3",
     "vue-style-loader": "^4.1.2",
     "vue-template-compiler": "^2.6.12",
-    "vuestro": "^3.42.1",
+    "vuestro": "^3.48.0",
     "vuex": "^3.5.1",
     "webpack": "^4.44.1",
     "webpack-cli": "^3.3.12",

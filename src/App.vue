@@ -12,7 +12,7 @@
     </template>
 
     <template #footer>
-      <div class="default-footer"><strong>{{ title }} v{{ version }}</strong> powered by volante-dashboard v{{ dashboardVersion }} <img :src="logo"/></div>
+      <div class="default-footer"><strong>{{ title }} v{{ version }}</strong> powered by volante-dashboard v{{ dashboardVersion }}</div>
     </template>
 
   </vuestro-app>
@@ -20,7 +20,7 @@
 
 <script>
 
-/* global __VERSION__, Vuex */
+/* global VERSION, Vuex */
 
 import NavbarStats from '@/components/NavbarStats';
 
@@ -31,7 +31,7 @@ export default {
   },
   data() {
     return {
-      dashboardVersion: __VERSION__,
+      dashboardVersion: VERSION,
     };
   },
   computed: {

@@ -52,7 +52,7 @@
 							</span>
 						</td>
 					</template>
-					<template #row-buttons>
+					<template #row-buttons="{ item }">
 						<vuestro-tooltip position="left" no-wrap rounded>
 		          <template #content>Download Message as JSON</template>
 							<vuestro-button round no-border @click="vuestroDownloadAsJson(item, 'log.json')">
@@ -79,6 +79,12 @@
 				</vuestro-button>
 			</template>
 			<vuestro-editor lang="json" :value="JSON.stringify(selectedItem, null, 2)" :options="{ maxLines: Infinity }"></vuestro-editor>
+			<template #footer>
+				<vuestro-hr></vuestro-hr>
+			</template>
+			<template #buttons>
+				<vuestro-button @click="showRaw = false">Close</vuestro-button>
+			</template>
 		</vuestro-modal>
 	</vuestro-container>
 </template>
