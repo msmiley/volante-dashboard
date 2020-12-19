@@ -81,14 +81,6 @@ module.exports = {
         });
         app.use(this.path, connectHistoryApiFallback({
           index: '//index.html',
-          rewrites: [
-            {
-              from: /\/volante-dashboard/,
-              to: function(context) {
-                return `${this.path}/${context.parsedUrl.pathname}`;
-              },
-            },
-          ],
         }));
         app.use(this.path, express.static(__dirname + '/dist'));
         this.$log(`listening on ${this.path}`);
