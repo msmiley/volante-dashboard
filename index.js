@@ -79,13 +79,21 @@ module.exports = {
           }
           next();
         });
-        app.get(`${this.path}/volante-dashboard-config.js`, (req, res) => {
-          res.send(`(function() { window.basePath = ${this.path}; })();`);
+        app.get(`${this.path}/static/volante-dashboard-config.js`, (req, res) => {
+          res.send(`(function() { window.basePath = '${this.path}'; })();`);
         });
+        app.use(this.path, express.static(__dirname + '/dist'));
         app.use(this.path, connectHistoryApiFallback({
           index: '//index.html',
+          rewrites: [
+            {
+              from: /^\/static\/.*$/,
+              to: function(context) {
+                return `${this.path}${context.parsedUrl.pathname}`;
+              },
+            },
+          ],
         }));
-        app.use(this.path, express.static(__dirname + '/dist'));
         this.$log(`listening on ${this.path}`);
       }
     },
