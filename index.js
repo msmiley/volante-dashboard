@@ -79,6 +79,9 @@ module.exports = {
           }
           next();
         });
+        app.get(`${this.path}/volante-dashboard-config.js`, (req, res) => {
+          res.send(`(function() { window.basePath = ${this.path}; })();`);
+        });
         app.use(this.path, connectHistoryApiFallback({
           index: '//index.html',
         }));
@@ -278,6 +281,12 @@ if (require.main === module) {
     bind: '0.0.0.0',
     port: 3030,
     middleware: [
+      (req, res, next) => {
+        if (req.url === '/volante-dashboard-config.js') {
+          return res.send('(function() { window.basePath = "/"; })();');
+        }
+        next();
+      },
       require('webpack-hot-middleware')(compiler, {
         log: false,
         heartbeat: 2000

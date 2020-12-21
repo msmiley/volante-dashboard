@@ -10,6 +10,7 @@ import Stats from './pages/Stats';
 import Settings from './pages/Settings';
 
 export default new Router({
+  base: window.basePath,
   mode: 'history',
   routes: [
     {
