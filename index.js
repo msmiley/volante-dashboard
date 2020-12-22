@@ -79,21 +79,21 @@ module.exports = {
           }
           next();
         });
+        app.use(this.path, connectHistoryApiFallback({
+          index: '//index.html',
+          // rewrites: [
+          //   {
+          //     from: /^\/static\/.*$/,
+          //     to: function(context) {
+          //       return `${this.path}${context.parsedUrl.pathname}`;
+          //     },
+          //   },
+          // ],
+        }));
         app.get(`${this.path}/static/volante-dashboard-config.js`, (req, res) => {
           res.send(`(function() { window.basePath = '${this.path}'; })();`);
         });
         app.use(this.path, express.static(__dirname + '/dist'));
-        app.use(this.path, connectHistoryApiFallback({
-          index: '//index.html',
-          rewrites: [
-            {
-              from: /^\/static\/.*$/,
-              to: function(context) {
-                return `${this.path}${context.parsedUrl.pathname}`;
-              },
-            },
-          ],
-        }));
         this.$log(`listening on ${this.path}`);
       }
     },
@@ -128,7 +128,7 @@ module.exports = {
     startSocketIO(server) {
       this.$debug('starting volante-dashboard socket.io');
       this.io = socketIo(server, {
-        path: '/volante-dashboard/socket.io',
+        path: `${this.path}/socket.io`,
       });
       this.socketEnabled = true;
       // let clients access io
