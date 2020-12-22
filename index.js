@@ -79,6 +79,7 @@ module.exports = {
           }
           next();
         });
+        // fallback necessary for vue-router SPA to work
         app.use(this.path, connectHistoryApiFallback({
           index: '//index.html',
           // rewrites: [
@@ -90,9 +91,11 @@ module.exports = {
           //   },
           // ],
         }));
+        // endpoint to provide the configured path prop as a global var for web app
         app.get(`${this.path}/static/volante-dashboard-config.js`, (req, res) => {
           res.send(`(function() { window.basePath = '${this.path}'; })();`);
         });
+        // serve up the the static web app files
         app.use(this.path, express.static(__dirname + '/dist'));
         this.$log(`listening on ${this.path}`);
       }
