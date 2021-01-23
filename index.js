@@ -1,5 +1,4 @@
 const express = require('express');
-const connectHistoryApiFallback = require('connect-history-api-fallback');
 const socketIo = require('socket.io');
 const volante = require('volante');
 
@@ -79,24 +78,19 @@ module.exports = {
           }
           next();
         });
-        // fallback necessary for vue-router SPA to work
-        app.use(this.path, connectHistoryApiFallback({
-          index: '//index.html',
-          // rewrites: [
-          //   {
-          //     from: /^\/static\/.*$/,
-          //     to: function(context) {
-          //       return `${this.path}${context.parsedUrl.pathname}`;
-          //     },
-          //   },
-          // ],
-        }));
+        // rewrite any non-/static paths to go to root of SPA
+        app.use(this.path, (req, res, next) => {
+          if (!req.url.startsWith('/static')) {
+            req.url = '/index.html';
+          }
+          next();
+        });
+        // serve up the the static web app files
+        app.use(this.path, express.static(__dirname + '/dist'));
         // endpoint to provide the configured path prop as a global var for web app
         app.get(`${this.path}/static/volante-dashboard-config.js`, (req, res) => {
           res.send(`(function() { window.basePath = '${this.path}'; })();`);
         });
-        // serve up the the static web app files
-        app.use(this.path, express.static(__dirname + '/dist'));
         this.$log(`listening on ${this.path}`);
       }
     },
@@ -266,6 +260,10 @@ if (require.main === module) {
 
   hub.attachAll().attachFromObject(module.exports);
 
+  hub.emit('VolanteDashboard.update', {
+    path: '/',
+  });
+
   hub.attachFromObject({
     name: 'TestSpoke',
     init() {
@@ -293,7 +291,7 @@ if (require.main === module) {
     port: 3030,
     middleware: [
       (req, res, next) => {
-        if (req.url === '/volante-dashboard-config.js') {
+        if (req.url === '/static/volante-dashboard-config.js') {
           return res.send('(function() { window.basePath = "/"; })();');
         }
         next();

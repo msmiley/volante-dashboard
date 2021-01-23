@@ -13,13 +13,13 @@
     "prepare": "webpack --config ./webpack.config.js"
   },
   "dependencies": {
-    "connect-history-api-fallback": "^1.6.0",
     "express": "^4.16.4",
     "socket.io": "^2.2.0",
     "socket.io-client": "^2.3.0"
   },
   "devDependencies": {
     "clean-webpack-plugin": "^3.0.0",
+    "connect-history-api-fallback": "^1.6.0",
     "css-loader": "^4.3.0",
     "file-loader": "^6.1.0",
     "html-webpack-plugin": "^4.4.1",
