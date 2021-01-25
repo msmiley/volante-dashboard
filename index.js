@@ -78,11 +78,18 @@ module.exports = {
           }
           next();
         });
-        // rewrite any non-/static paths to go to root of SPA
+        // custom url-rewriting
         app.use(this.path, (req, res, next) => {
-          if (!req.url.startsWith('/static')) {
-            req.url = '/index.html';
+          //  no re-write for statis
+          if (req.url.startsWith('/static')) {
+            return next();
           }
+          // redirect on base path to make sure there's a trailing slash
+          if (req.url === '/') {
+            return res.redirect(`${this.path}/index.html`);
+          }
+          // default re-write for trailing slash and any vue-router routes
+          req.url = '//index.html';
           next();
         });
         // serve up the the static web app files
