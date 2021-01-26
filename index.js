@@ -290,7 +290,7 @@ if (require.main === module) {
 
   // set up hot-reload webpack environment for dev
   const webpack = require('webpack');
-  const webpackConfig = require('./node_modules/vuestro/build/webpack.dev.config.js');
+  const webpackConfig = require('./webpack.dev.config.js');
   const compiler = webpack(webpackConfig);
 
   hub.emit('VolanteExpress.update', {
@@ -303,14 +303,12 @@ if (require.main === module) {
         }
         next();
       },
-      require('webpack-hot-middleware')(compiler, {
-        log: false,
-        heartbeat: 2000
-      }),
       require('connect-history-api-fallback')(),
       require('webpack-dev-middleware')(compiler, {
         publicPath: '/',
-        logLevel: 'silent',
+      }),
+      require('webpack-hot-middleware')(compiler, {
+        heartbeat: 2000
       }),
     ],
   });

@@ -1,22 +1,27 @@
 <template>
   <vuestro-dropdown right click-to-open close-on-content-click>
     <template #button>
-		  <vuestro-button pill value variant="success" size="sm">
-		    <template #icon>
-  		    <vuestro-icon name="hdd"></vuestro-icon>
-		    </template>
-		    Load Event
-		  </vuestro-button>
-	  </template>
-	  <template #default>
-  	  <vuestro-list-button v-for="(v, k) in savedEvents" :key="k" @click="onLoad(v)">
+      <vuestro-button pill value variant="success" size="sm">
+        <template #icon>
+          <vuestro-icon name="hdd"></vuestro-icon>
+        </template>
+        Load Event
+      </vuestro-button>
+    </template>
+    <template #default>
+      <vuestro-list-button v-for="(v, k) in savedEvents" :key="k" @click="onLoad(v)">
         {{ k }}
-  	  </vuestro-list-button>
+      </vuestro-list-button>
       <div v-if="showNoSavedEvents">No events yet</div>
-	  </template>
-	  <template #buttons>
-	    <span @click="onManageSaved">Manage Events</span>
-	  </template>
+    </template>
+    <template #buttons>
+      <vuestro-button variant="info" value @click="onManageSaved">
+        <template #icon>
+          <vuestro-icon name="list-ul"></vuestro-icon>
+        </template>
+        Manage Events
+      </vuestro-button>
+    </template>
   </vuestro-dropdown>
 </template>
 

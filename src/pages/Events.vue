@@ -10,11 +10,14 @@
 					</vuestro-button>
 				</span>
 				<span class="events-toolbar">
-					<vuestro-button round no-border @click="createOpen = true">
-						<vuestro-icon name="plus"></vuestro-icon>
+					<vuestro-button pill value no-border variant="success" @click="createOpen = true">
+						<template #icon>
+							<vuestro-icon name="plus"></vuestro-icon>
+						</template>
+						New
 					</vuestro-button>
 					<vuestro-button round no-border @click="onClear">
-						<vuestro-icon name="ban"></vuestro-icon>
+						<vuestro-icon name="trash"></vuestro-icon>
 					</vuestro-button>
 				</span>
 			</template>
@@ -26,15 +29,20 @@
 				</div>
 				<div class="events-list">
 					<div v-if="filteredEvents.length == 0" class="no-data">No events, yet...</div>
-					<div v-for="(e, idx) in filteredEvents" class="event" @click="onSelectEvent(idx, e)" :class="{ selected: idx == currentIdx }">
-						<div class="type">
-							<vuestro-button round no-border @click="reEmit(e)">
+
+					<vuestro-list-item v-for="(e, idx) in filteredEvents" :key="e.ts"
+					                   :selected="idx == currentIdx"
+					                   @click="onSelectEvent(idx, e)">
+						<template #icon>
+						</template>
+						<template #title>{{ e.eventType }}</template>
+						<template #description>{{ e.ts | vuestroHMS }}</template>
+						<template #buttons>
+							<vuestro-button round no-border variant="text" @click="reEmit(e)">
 								<vuestro-icon name="share-square"></vuestro-icon>
 							</vuestro-button>
-							<span>{{ e.eventType }}</span>
-						</div>
-						<div>{{ e.ts | vuestroHMS }}</div>
-					</div>
+						</template>
+					</vuestro-list-item>
 				</div>
 			</div>
 		</vuestro-card>
@@ -42,21 +50,21 @@
 			<vuestro-panel stretch scroll class="event-data-panel">
 				<template #title>Event Data</template>
 				<template #toolbar>
-					<vuestro-button pill no-border @click="$refs.ob.expandAll()">
+					<vuestro-button pill no-border size="sm" @click="$refs.ob.expandAll()">
 						<template #icon>
 							<vuestro-icon name="plus"></vuestro-icon>
 						</template>
 						Expand All
 					</vuestro-button>
-					<vuestro-button pill no-border @click="$refs.ob.collapseAll()">
+					<vuestro-button pill no-border size="sm" @click="$refs.ob.collapseAll()">
 						<template #icon>
 							<vuestro-icon name="minus"></vuestro-icon>
 						</template>
 						Collapse All
 					</vuestro-button>
-					<vuestro-tooltip position="bottom" no-wrap rounded>
+					<vuestro-tooltip position="bottom" no-wrap>
 	          <template #content>Download event data as JSON</template>
-						<vuestro-button round no-border @click="vuestroDownloadAsJson(currentObject, 'event.json')">
+						<vuestro-button round no-border size="sm" @click="vuestroDownloadAsJson(currentObject, 'event.json')">
 							<vuestro-icon name="download"></vuestro-icon>
 						</vuestro-button>
 					</vuestro-tooltip>
