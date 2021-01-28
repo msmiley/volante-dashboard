@@ -10,6 +10,7 @@
   "scripts": {
     "dev": "npm start",
     "start": "node index.js",
+    "build": "npm run prepare",
     "prepare": "webpack --config ./webpack.prod.config.js"
   },
   "dependencies": {
@@ -35,7 +36,7 @@
     "vue-router": "^3.4.3",
     "vue-style-loader": "^4.1.2",
     "vue-template-compiler": "^2.6.12",
-    "vuestro": "^5.1.1",
+    "vuestro": "^5.2.1",
     "vuex": "^3.5.1",
     "webpack": "^4.44.1",
     "webpack-cli": "^3.3.12",
